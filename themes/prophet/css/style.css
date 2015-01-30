@@ -16,7 +16,7 @@
 }
 
 .front #block-predict-prediction-block {
-	margin: 75px auto;
+	margin: 60px auto;
 	width: 450px;
 	margin-bottom: 35px;
 }
@@ -100,7 +100,7 @@ a.logo img {
 .navbar.container {
 	max-width: 100%;
 	width: 100%;
-	margin: 0;
+	margin: 0 0 25px 0;
 }
 
 .color-state {
@@ -328,4 +328,8 @@ h1, h2, h3, th {
 
 nav {
 	font-size: 16px;
+}
+
+@media screen and (max-width: 768px) {
+    
 }
