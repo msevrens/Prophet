@@ -64,7 +64,23 @@
 	margin-left: 20px;
 	border-left: solid 2px black;
 	border-top: solid 2px black;
-	height: 50px;
+	height: 160px;
+}
+
+.tooltip {
+	display: none !important;
+}
+
+#edit-uid-wrapper {
+	position: relative;
+	top: -85px;
+	left: 35px;
+}
+
+#views-exposed-form-front-page-redesign-block .views-submit-button {
+	position: relative;
+	top: -75px;
+	left: 35px;
 }
 
 /* Thought Bubbles */
@@ -79,6 +95,12 @@ a.logo img {
 	border-radius: 100px;
 	margin-right: 11px;
 	margin-top: 10px;
+}
+
+.navbar.container {
+	max-width: 100%;
+	width: 100%;
+	margin: 0;
 }
 
 .color-state {
@@ -154,7 +176,7 @@ a.logo img {
 	margin: 0 auto;
 }
 
-#block-views-front-page-redesign-block .form-control {
+#block-views-front-page-redesign-block .form-control.form-select {
 	height: auto;
 }
 

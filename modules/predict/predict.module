@@ -177,6 +177,7 @@ function predict_node_grants($account, $op) {
 
 function predict_node_access_records($node) {
 
+  # If private is selected
   if (!empty($node->private)) {
     
     $grants = array();
