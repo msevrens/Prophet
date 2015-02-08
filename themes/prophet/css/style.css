@@ -8,7 +8,15 @@
 /* New Front Page Design */
 
 .rate-widget-2 li.last {
-	display: none;
+	/* display: none; */
+	opacity: 0.2;
+	height: 0px;
+	overflow: visible;
+	transition: opacity .2s;
+}
+
+.rate-widget-2 li.last:hover{
+	opacity: 0.8;
 }
 
 .thought-content .rate-widget {
@@ -50,21 +58,13 @@
 	font-size: 27px;
 }
 
-.front #edit-thought-type-wrapper {
-	background: white;
-	padding: 10px;
-	position: relative;
-	top: -65px;
-	margin: 10px;
-	left: 15px;
-}
-
 .view-front-page-redesign .view-filters {
 	width: 190px;
 	margin-left: 20px;
 	border-left: solid 2px black;
 	border-top: solid 2px black;
 	height: 160px;
+	border-top-left-radius: 35px;
 }
 
 .tooltip {
@@ -195,7 +195,7 @@ a.logo img {
 }
 
 #block-views-front-page-redesign-block div.rate-widget-2 ul li {
-	float: left;
+	/* float: left; */
 	margin-right: 10px;
 }
 
@@ -290,10 +290,10 @@ a:visited {
 }
 
 .rate-widget-2 .rate-button {
-	width: 23px;	
-	height: 23px;
+	width: 20px;	
+	height: 20px;
 	border-radius: 100px;
-	padding-left: 6px;
+	padding-left: 4px;
 }
 
 .rate-widget-2 ul {
@@ -305,7 +305,7 @@ a:visited {
 }
 
 .rate-widget-2 li.last a {
-	padding-left: 8px;
+	padding-left: 6px;
 	background: #C7C7C7;
 }
 
@@ -331,6 +331,7 @@ nav {
 }
 
 /* Callback Boxes */
+
 .alert-block.alert-success {
 	max-width: 275px;
 	margin: 0 auto;
@@ -343,6 +344,51 @@ nav {
 	color: #777;
 	border: none;
 }
+
+/* Type Filter */
+
+.front #edit-thought-type-wrapper {
+	background: white;
+	padding: 10px;
+	position: relative;
+	top: -65px;
+	margin: 10px;
+	left: 15px;
+}
+
+/*
+
+#edit-thought-type-wrapper option {
+	display: block;
+	height: 35px;
+	width: 35px;
+	overflow: hidden;
+	float: left;
+	text-indent: -9999px;
+	border-radius: 50px;
+	border: solid 4px #D4D4D4;
+	margin: 3px;
+}
+
+#edit-thought-type-wrapper option[value="Predict"][selected] {
+	background: #5a4e8c;
+}
+
+#edit-thought-type-wrapper option[value="Reflect"] {
+	background: #A33333;
+}
+
+#edit-thought-type-wrapper option[value="Ask"] {
+	background: #5cb85c;
+}
+
+#edit-thought-type-wrapper option[value="State"] {
+	background: #428bca;
+}
+
+*/
+
+/* Mobile */
 
 @media screen and (max-width: 768px) {
     
