@@ -26,13 +26,14 @@
  
 $color_class = (empty($row->field_field_type)) ? 'thought' : strtolower($row->field_field_type[0]["raw"]["value"]);
 $type_class = "color-" . $color_class;
-unset($fields['field_type'])
+$privacy_class = $row->field_field_private[0]["raw"]["value"] ? 'private' : 'public';
+unset($fields['field_type']);
  
 ?>
 <div class="thought-bubble">
-	<div class="<?php print $type_class; ?>"></div>
+	<div class="<?php print $type_class; print ' ' . $privacy_class; ?>"></div>
 </div>
-<div class="thought-content <?php print $color_class; ?>">
+<div class="thought-content <?php print $color_class;?>">
 <?php foreach ($fields as $id => $field): ?>
   <?php if (!empty($field->separator)): ?>
     <?php print $field->separator; ?>
