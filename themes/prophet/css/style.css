@@ -88,6 +88,13 @@ a.logo img {
 	display: none;
 }
 
+.thought-bubble .private {
+	background-image: url('private.png');
+	background-position: center;
+	background-size: 33px;
+	background-repeat: no-repeat;
+}
+
 .navbar a.logo {
 	height: 30px;
 	width: 30px;
