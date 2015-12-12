@@ -23,7 +23,7 @@
 	padding-top: 2px;
 }
 
-.front #block-predict-prediction-block {
+.front #block-thought-thought-block {
 	margin: 60px auto;
 	width: 450px;
 	margin-bottom: 35px;
@@ -33,15 +33,15 @@
   display: none;
 }
 
-.front .view-front-page-redesign {
+#block-views-bubble-stream-block .view-Bubble-Stream {
 	font-family: 'Quicksand', sans-serif;
 }
 
-.front .view-front-page-redesign .views-field-title {
+.front .view-Bubble-Stream .views-field-title {
 	font-size: 22px;
 }
 
-.front #block-views-notification-stream-block {
+.front #block-views-bubble-stream-block {
 	width: 655px;
 	margin: 0 auto;
 }
@@ -58,7 +58,7 @@
 	font-size: 27px;
 }
 
-.view-front-page-redesign .view-filters {
+.view-Bubble-Stream .view-filters {
 	width: 190px;
 	margin-left: 20px;
 	border-left: solid 2px black;
@@ -77,7 +77,7 @@
 	left: 35px;
 }
 
-#views-exposed-form-front-page-redesign-block .views-submit-button {
+#views-exposed-form-Bubble-Stream-block .views-submit-button {
 	position: relative;
 	top: -75px;
 	left: 35px;
@@ -178,43 +178,43 @@ a.logo img {
 	float: left;	
 }
 
-#block-views-front-page-redesign-block {
+#block-views-bubble-stream-block {
 	width: 655px;
 	margin: 0 auto;
 }
 
-#block-views-front-page-redesign-block .form-control.form-select {
+#block-views-bubble-stream-block .form-control.form-select {
 	height: auto;
 }
 
-#block-views-front-page-redesign-block .views-row {
+#block-views-bubble-stream-block .views-row {
 	margin-bottom: 15px;
 }
 
-#block-views-front-page-redesign-block .view-content {
+#block-views-bubble-stream-block .view-content {
 	 background-image: url("./2x2_black.gif");
 	 background-repeat: repeat-y;
 	 background-position: 20px 0px;
 }
 
-#block-views-front-page-redesign-block .views-field-title a {
+#block-views-bubble-stream-block .views-field-title a {
 	color: #222;
 }
 
-#block-views-front-page-redesign-block div.rate-widget-2 ul li {
+#block-views-bubble-stream-block div.rate-widget-2 ul li {
 	/* float: left; */
 	margin-right: 10px;
 }
 
-#block-views-front-page-redesign-block div.rate-widget-2 ul {
+#block-views-bubble-stream-block div.rate-widget-2 ul {
 	margin-bottom: 0;
 }
 
-#block-views-front-page-redesign-block .rate-widget-fivestar ul {
+#block-views-bubble-stream-block .rate-widget-fivestar ul {
 	padding-left: 0px;
 }
 
-#block-views-front-page-redesign-block .block-title {
+#block-views-bubble-stream-block .block-title {
 	width: 200px;
 	margin: 0 auto;
 	text-align: center;
