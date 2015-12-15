@@ -15,13 +15,13 @@ function thought_quantifier_schema() {
 				'type' => 'varchar',
 				'length' => 32,
 				'not null' => TRUE,
-				'default' => '')
+				'default' => ''
 			),
 			'date' => array(
 				'description' => 'The date of the word being stored',
 				'type' => 'date',
 				'not null' => TRUE,
-				'default' => '')
+				'default' => ''
 			)
 		),
 		'indexes' => array(
