@@ -19,14 +19,12 @@ function thought_quantifier_schema() {
 			),
 			'date' => array(
 				'description' => 'The date of the word being stored',
-				'type' => 'date',
-				'not null' => TRUE,
-				'default' => ''
+				'mysql_type' => 'DATE',
+				'not null' => TRUE
 			)
 		),
 		'indexes' => array(
 			'uid' => array('uid'),
-			'date' => array('date'),
 			'word' => array('word')
 		),
 		'foreign keys' => array(
