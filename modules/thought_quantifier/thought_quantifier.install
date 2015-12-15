@@ -18,16 +18,19 @@ function thought_quantifier_schema() {
 				'default' => ''),
 			),
 			'date' => array(
-				'description' => 'The dat of the word being stored',
+				'description' => 'The date of the word being stored',
 				'type' => 'date',
 				'not null' => TRUE,
 				'default' => ''),
 			),
 		'indexes' => array(
+			'uid' => array('uid'),
+			'date' => array('date'),
+			'word' => array('word')
 		),
 		'foreign keys' => array(
 			'uid' => array(
-				'table' => 'user',
+				'table' => 'users',
 				'columns' => array('uid' => 'uid'),
 			),
 		),
