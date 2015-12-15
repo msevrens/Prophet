@@ -15,14 +15,15 @@ function thought_quantifier_schema() {
 				'type' => 'varchar',
 				'length' => 32,
 				'not null' => TRUE,
-				'default' => ''),
+				'default' => '')
 			),
 			'date' => array(
 				'description' => 'The date of the word being stored',
 				'type' => 'date',
 				'not null' => TRUE,
-				'default' => ''),
-			),
+				'default' => '')
+			)
+		),
 		'indexes' => array(
 			'uid' => array('uid'),
 			'date' => array('date'),
@@ -31,8 +32,8 @@ function thought_quantifier_schema() {
 		'foreign keys' => array(
 			'uid' => array(
 				'table' => 'users',
-				'columns' => array('uid' => 'uid'),
-			),
+				'columns' => array('uid' => 'uid')
+			)
 		),
 		'primary key' => array('uid', 'word', 'date')
 	);
