@@ -1,1 +1,13 @@
 <?php
+
+/**
+* Implements hook_cron()
+*/
+
+function thought_quantifier_cron() {
+	$cron_last = variable_get('cron_last');
+	if (date('ymd', $cron_last) != date('ymd', time())) {
+  		// Load thoughts and process through Prophet Mind
+  		variable_set('cron_last', date('ymd', time()));
+	}  
+}
