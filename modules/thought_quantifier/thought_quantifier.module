@@ -72,5 +72,14 @@ function thought_quantifier_form($form, &$form_state) {
 function thought_quantifier_form_submit($form, &$form_state) {
 
   # Exectute calls to Prophet Mind here
+  $query = db_select('node', 'n');
+  $query->condition('n.type', 'thought', '=')->fields('n', array('title', 'uid', 'created'));
+  $query->condition('created', array(strtotime("yesterday 0:00"), strtotime("today 0:00")), 'BETWEEN');
+  #$query->condition('created', array(strtotime("-1 week"), strtotime("now")), 'BETWEEN');
+  $result = $query->execute();
+  foreach ($result as $record) {
+      dpm($record);
+  }
+
 
 }
