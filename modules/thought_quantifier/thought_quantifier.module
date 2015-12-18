@@ -11,3 +11,66 @@ function thought_quantifier_cron() {
   		variable_set('cron_last', date('ymd', time()));
 	}  
 }
+
+/**
+* Implements hook_block_info()
+*/
+
+function thought_quantifier_block_info() {
+
+  $blocks = array();
+
+  $blocks['thought_quantifier_block'] = array(
+    'info' => t('Temporary block to debug and build thought quantification'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+
+  return $blocks;
+
+}
+
+/**
+* Implements hook_block_view().
+*/
+
+function thought_quantifier_block_view($delta = '') {
+
+  $block = array();
+
+  switch ($delta) {
+    case 'thought_quantifier_block':
+      $block['subject'] = '';
+      $block['content'] = drupal_get_form('thought_quantifier_form');
+      break;
+  }
+
+  return $block;
+
+}
+
+/**
+ * Define the form to be returned.
+ */
+
+function thought_quantifier_form($form, &$form_state) {
+
+  # Submit Button
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Process Thoughts'),
+    '#submit' => array('thought_quantifier_form_submit'),
+  );
+  
+  return $form;
+  
+}
+
+/**
+ * Run code to make calls to Prophet Mind
+ */
+
+function thought_quantifier_form_submit($form, &$form_state) {
+
+  # Exectute calls to Prophet Mind here
+
+}
