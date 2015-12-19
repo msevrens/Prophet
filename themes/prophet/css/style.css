@@ -340,10 +340,10 @@ nav {
 /* Callback Boxes */
 
 .alert-block.alert-success {
-	max-width: 275px;
+	/*max-width: 275px;*/
 	margin: 0 auto;
 	text-align: center;
-	text-transform: capitalize;
+	/*text-transform: capitalize;*/
 	font-family: Quicksand;
 	font-size: 15px;
 	border-radius: 12px;

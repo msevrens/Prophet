@@ -75,19 +75,63 @@ function thought_quantifier_form_submit($form, &$form_state) {
   $query = db_select('node', 'n');
   $query->condition('n.type', 'thought', '=')->fields('n', array('title', 'uid', 'created'));
   #$query->condition('created', array(strtotime("yesterday 0:00"), strtotime("today 0:00")), 'BETWEEN');
-
-  # Execute Query and Prepare results for Prophet Mind
   $result = $query->execute();
+
+  # Prepare Results for Prophet Mind
   $users = []; 
 
   foreach ($result as $record) {
-    if (empty($users[$record->uid])) $users[$record->uid] = [];
-    array_push($users[$record->uid], $record->title);
+
+    $date = date('Y-m-d', $record->created);
+
+    # Add User Object
+    if (empty($users[$record->uid])) $users[$record->uid] = ["days" => []];
+
+    # Add Day Object
+    if (empty($users[$record->uid]["days"][$date])) {
+      $users[$record->uid]["days"][$date] = ["date" => $date, "thoughts" => []];
+    }
+
+    # Add Thought
+    array_push($users[$record->uid]["days"][$date]["thoughts"], $record->title);
+
   }
+
+  foreach ($users as $uid => $user) {
+
+    $day_array = [];
+
+    foreach ($user["days"] as $day) {
+      array_push($day_array, $day);
+    }
+
+    $user["days"] = $day_array;
+    $users[$uid] = $user;
+
+  }
+
+  # Process Thoughts
+  foreach ($users as $user) {
+
+    # Call Prophet Mind
+    dpm(json_encode($user));
+    #query_prophet_mind($user);
+
+    # Store Result In WordCount Table
+
+  }
+
+}
+
+/**
+ * Query Prophet Mind
+ */
+
+function query_prophet_mind($user) {
 
   # Send Thoughts to Prophet Mind  
   $url = 'http://localhost:443/wordstream/';
-  $data = '';
+  $data = json_encode($user);
   $options = array(
   'http' => array(
     'method'  => 'POST',
@@ -101,6 +145,6 @@ function thought_quantifier_form_submit($form, &$form_state) {
   $result = file_get_contents($url, false, $context);
   $response = json_decode($result);
 
-  # Store Result In WordCount Table
+  return $response;
 
 }
