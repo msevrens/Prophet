@@ -111,14 +111,33 @@ function thought_quantifier_form_submit($form, &$form_state) {
   }
 
   # Process Thoughts
-  foreach ($users as $user) {
+  foreach ($users as $uid => $user) {
 
     # Call Prophet Mind
     $response = query_prophet_mind($user);
 
     # Store Result In WordCount Table
-    dpm($response);
+    store_wordcounts($response, $uid);
 
+  }
+
+}
+
+/**
+ * Save Word Counts to Database
+ */
+
+function store_wordcounts($wordcounts, $uid) {
+
+  foreach ($wordcounts->data->days as $day) {
+    foreach ($day->word_list as $word) {
+      $query = db_merge('word_counts');
+      $query->key(['uid' => $uid, 'word' => $word->word, 'date' => $day->date]);
+      $query->fields([
+        'count' => $word->count
+      ]);
+      $query->execute();
+    }
   }
 
 }
