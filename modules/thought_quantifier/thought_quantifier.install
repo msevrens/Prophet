@@ -10,6 +10,13 @@ function thought_quantifier_schema() {
 				'not null' => TRUE,
 				'default' => 0
 			),
+			'count' => array(
+				'description' => 'The count of the word for that day',
+				'type' => 'int',
+				'unsigned' => TRUE,
+				'not null' => TRUE,
+				'default' => 0
+			),
 			'word' => array(
 				'description' => 'The word being counted',
 				'type' => 'varchar',
