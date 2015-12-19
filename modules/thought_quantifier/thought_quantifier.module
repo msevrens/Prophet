@@ -78,11 +78,14 @@ function thought_quantifier_form_submit($form, &$form_state) {
 
   # Execute Query and Prepare results for Prophet Mind
   $result = $query->execute();
+  $users = []; 
+
   foreach ($result as $record) {
-      dpm($record);
+    if (empty($users[$record->uid])) $users[$record->uid] = [];
+    array_push($users[$record->uid], $record->title);
   }
 
-  # Send Thoughts to Prophet Mind
+  # Send Thoughts to Prophet Mind  
   $url = 'http://localhost:443/wordstream/';
   $data = '';
   $options = array(
@@ -96,7 +99,7 @@ function thought_quantifier_form_submit($form, &$form_state) {
 
   $context  = stream_context_create($options);
   $result = file_get_contents($url, false, $context);
-  $response = json_decode( $result );
+  $response = json_decode($result);
 
   # Store Result In WordCount Table
 
