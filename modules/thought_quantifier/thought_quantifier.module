@@ -114,10 +114,10 @@ function thought_quantifier_form_submit($form, &$form_state) {
   foreach ($users as $user) {
 
     # Call Prophet Mind
-    dpm(json_encode($user));
-    #query_prophet_mind($user);
+    $response = query_prophet_mind($user);
 
     # Store Result In WordCount Table
+    dpm($response);
 
   }
 
@@ -131,11 +131,10 @@ function query_prophet_mind($user) {
 
   # Send Thoughts to Prophet Mind  
   $url = 'http://localhost:443/wordstream/';
-  $data = json_encode($user);
   $options = array(
   'http' => array(
     'method'  => 'POST',
-    'content' => json_encode($data),
+    'content' => json_encode($user),
     'header'=>  "Content-Type: application/json\r\n" .
                 "Accept: application/json\r\n"
     )
