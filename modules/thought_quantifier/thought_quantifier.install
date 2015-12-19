@@ -32,7 +32,8 @@ function thought_quantifier_schema() {
 		),
 		'indexes' => array(
 			'uid' => array('uid'),
-			'word' => array('word')
+			'word' => array('word'),
+			'word' => array('date')
 		),
 		'foreign keys' => array(
 			'uid' => array(
