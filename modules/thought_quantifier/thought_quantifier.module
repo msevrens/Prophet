@@ -90,6 +90,15 @@ function load_wordstream_markup() {
   # Fetch Word Counts
   $query = db_select('word_counts', 'w');
   $query->condition('w.uid', $user->uid, '=')->fields('w', array('date', 'word', 'count'));
+
+  # Limit By Top Words
+  $db_or = db_or();
+
+  foreach ($top_words as $word) {
+    $db_or->condition('w.word', $word, '=');
+  }
+
+  $query->condition($db_or);
   $result = $query->execute();
   $formatted = [];
 
