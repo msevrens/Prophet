@@ -95,9 +95,15 @@ function load_wordstream_markup() {
 
   # Get Date Details
   $max_min_dates = db_query('select max(date), min(date) from word_counts')->fetchAssoc();
-  $s_date = strtotime('this week', strtotime($max_min_dates['min(date)']));
-  $e_date = strtotime('last week', strtotime($max_min_dates['max(date)']));
-  
+  $first_monday = strtotime('this week', strtotime($max_min_dates['min(date)']));
+  $last_monday = strtotime('last week', strtotime($max_min_dates['max(date)']));
+  $mondays = [];
+
+  # Create Structure to Hold Data
+  for ($i = $first_monday; $i <= $last_monday; $i = strtotime('+1 week', $i)) {
+    $mondays[date('Y-m-d', $i)] = [];
+  }
+
   # Format Results for Word Stream
   foreach ($result as $record) {
     #dpm($record);
