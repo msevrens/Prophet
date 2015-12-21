@@ -45,6 +45,7 @@ function thought_quantifier_block_info() {
 function thought_quantifier_block_view($delta = '') {
 
   $block = array();
+  $m_path = drupal_get_path('module', 'thought_quantifier');
 
   switch ($delta) {
     case 'thought_quantifier_block':
@@ -53,12 +54,33 @@ function thought_quantifier_block_view($delta = '') {
       break;
     case 'word_stream_block':
       $block['subject'] = '';
-      $block['content'] = 'Insert Word Stream Here :)';
+      $block['content'] = [
+        '#markup' => load_wordstream_markup(),
+        '#attached' => [
+          'js' => [
+            'http://d3js.org/d3.v2.js',
+            $m_path . '/UI/wordStream/bootstrap-multiselect.js',
+            $m_path . '/UI/wordStream/script.js',
+          ],
+          'css' => [
+            $m_path . '/UI/wordStream/bootstrap-multiselect.css',
+            $m_path . '/UI/wordStream/style.css',
+          ]
+        ]
+      ];
       break;
   }
 
   return $block;
 
+}
+
+/**
+* Load Word Stream Data and Produce Markup
+*/
+
+function load_wordstream_markup() {
+  return '<div class="chart"></div>';
 }
 
 /**
