@@ -83,13 +83,21 @@ function load_wordstream_markup() {
 
   global $user;
 
+  // Fetch Top Words
+  $result = db_query('select word, sum(count) from word_counts group by word order by sum(count) desc limit 250');
+  $top_words = array_keys($result->fetchAllAssoc('word'));
+
+  // Fetch Word Counts
   $query = db_select('word_counts', 'w');
   $query->condition('w.uid', $user->uid, '=')->fields('w', array('date', 'word', 'count'));
   $result = $query->execute();
   
+  // Format Results for Word Stream
   foreach ($result as $record) {
     //dpm($record);
   }
+
+  // Convert to JSON
 
   return '<div class="chart"></div>';
 
