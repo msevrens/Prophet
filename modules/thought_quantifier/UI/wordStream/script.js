@@ -108,8 +108,8 @@
 		    	width = document.body.clientWidth - focusMargin.left - focusMargin.right,
 		    	axisHeight = 20,
 		    	numWords = 25,
-		     	focusHeight = 430,
-		     	contextHeight = 80,
+		     	focusHeight = 300,
+		     	contextHeight = 50,
 		     	svgHeight = focusHeight + contextHeight + (2 * axisHeight),
 		     	wordsInSelect = 500;
 
@@ -311,9 +311,9 @@
 
 		}
 	    
-	    //var csvpath = "../../data/output/all_stream.csv";
+	    var csvpath = "http://prophet.vision/sites/all/modules/thought_quantifier/all_stream.csv";
 		
-		//d3.csv(csvpath, fillInDays);
+		d3.csv(csvpath, fillInDays);
 
 	});
 })(jQuery);

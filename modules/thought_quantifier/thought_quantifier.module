@@ -60,11 +60,11 @@ function thought_quantifier_block_view($delta = '') {
           'js' => [
             'http://d3js.org/d3.v2.js',
             $m_path . '/UI/wordStream/bootstrap-multiselect.js',
-            $m_path . '/UI/wordStream/script.js',
+            $m_path . '/UI/wordStream/script.js'
           ],
           'css' => [
-            $m_path . '/UI/wordStream/bootstrap-multiselect.css',
-            $m_path . '/UI/wordStream/style.css',
+            $m_path . '/UI/wordStream/styled.css',
+            $m_path . '/UI/wordStream/bootstrap-multiselect.css'
           ]
         ]
       ];
@@ -80,7 +80,19 @@ function thought_quantifier_block_view($delta = '') {
 */
 
 function load_wordstream_markup() {
+
+  global $user;
+
+  $query = db_select('word_counts', 'w');
+  $query->condition('w.uid', $user->uid, '=')->fields('w', array('date', 'word', 'count'));
+  $result = $query->execute();
+  
+  foreach ($result as $record) {
+    //dpm($record);
+  }
+
   return '<div class="chart"></div>';
+
 }
 
 /**
