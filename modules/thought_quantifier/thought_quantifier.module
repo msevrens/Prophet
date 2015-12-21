@@ -83,21 +83,27 @@ function load_wordstream_markup() {
 
   global $user;
 
-  // Fetch Top Words
+  # Fetch Top Words and Max and Min Dates
   $result = db_query('select word, sum(count) from word_counts group by word order by sum(count) desc limit 250');
   $top_words = array_keys($result->fetchAllAssoc('word'));
 
-  // Fetch Word Counts
+  # Fetch Word Counts
   $query = db_select('word_counts', 'w');
   $query->condition('w.uid', $user->uid, '=')->fields('w', array('date', 'word', 'count'));
   $result = $query->execute();
+  $formatted = [];
+
+  # Get Date Details
+  $max_min_dates = db_query('select max(date), min(date) from word_counts')->fetchAssoc();
+  $s_date = strtotime('this week', strtotime($max_min_dates['min(date)']));
+  $e_date = strtotime('last week', strtotime($max_min_dates['max(date)']));
   
-  // Format Results for Word Stream
+  # Format Results for Word Stream
   foreach ($result as $record) {
-    //dpm($record);
+    #dpm($record);
   }
 
-  // Convert to JSON
+  # Convert to JSON
 
   return '<div class="chart"></div>';
 
