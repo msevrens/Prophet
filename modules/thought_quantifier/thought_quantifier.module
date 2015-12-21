@@ -103,12 +103,12 @@ function load_wordstream_markup() {
   $daily_words = [];
 
   foreach ($top_words as $word) {
-    $daily_words[$word] = 0;
+    $daily_words[$word] = "0";
   }
 
   for ($i = $first_monday; $i <= $last_monday; $i = strtotime('+1 week', $i)) {
     $formatted_data[date('Y-m-d', $i)] = $daily_words;
-    $formatted_data[date('Y-m-d', $i)]['Post Date'] = date('Y-m-d', $i);
+    $formatted_data[date('Y-m-d', $i)]['Post Date'] = date('m/d/Y', $i);
   }
 
   # Format Results for Word Stream
@@ -120,7 +120,7 @@ function load_wordstream_markup() {
   # Convert to JSON
   $json_data = json_encode(array_values($formatted_data));
 
-  return '<div class="chart"></div>';
+  return '<div class="chart"></div><script>var streamData=' . $json_data . '; buildWordStream(streamData)' . '</script>';
 
 }
 
