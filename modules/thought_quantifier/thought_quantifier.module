@@ -84,7 +84,7 @@ function load_wordstream_markup() {
   global $user;
 
   # Fetch Top Words and Max and Min Dates
-  $result = db_query('select word, sum(count) from ubs_word_counts where uid = ' . $user->uid . ' group by word order by sum(count) desc limit 100');
+  $result = db_query('select word, sum(count) from word_counts where uid = ' . $user->uid . ' group by word order by sum(count) desc limit 100');
   $top_words = array_keys($result->fetchAllAssoc('word'));
 
   # Fetch Word Counts
