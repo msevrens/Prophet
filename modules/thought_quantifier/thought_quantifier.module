@@ -123,7 +123,7 @@ function load_wordstream_markup() {
   # Format Results for Word Stream
   foreach ($result as $record) {
     $fdow = date('Y-m-d', strtotime('this week', strtotime($record->date)));
-    $formatted_data[$fdow][$record->word] = $record->count;
+    $formatted_data[$fdow][$record->word] += $record->count;
   }
 
   # Convert to JSON
