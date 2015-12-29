@@ -13,6 +13,11 @@ function thought_block_info() {
     'cache' => DRUPAL_CACHE_GLOBAL,
   );
 
+  $blocks['fix_permissions_block'] = array(
+    'info' => t('Fix Permissions'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+
   return $blocks;
 
 }
@@ -30,10 +35,55 @@ function thought_block_view($delta = '') {
       $block['subject'] = '';
       $block['content'] = drupal_get_form('thought_form');
       break;
+    case 'fix_permissions_block':
+      $block['subject'] = '';
+      $block['content'] = drupal_get_form('fix_permissions_form');
+      break;
   }
 
   return $block;
 
+}
+
+/**
+* Implements hook_form_submit()
+*/
+
+function fix_permissions_form_submit($form, &$form_state) {
+
+  dpm("Do stuff to fix permissions"); 
+  $query = db_select('field_data_field_private', 'f'); 
+  $query->join('node', 'n', 'n.nid = f.entity_id'); 
+  $query->condition('f.field_private_value', 1, '='); 
+  $query->fields('f', ['entity_id', 'field_private_value']); 
+  $query->fields('n', ['uid']); 
+  $result = $query->execute(); 
+ 
+  foreach ($result as $record) {
+    $updated = db_update('node_access');
+    $updated->fields(['realm' => 'predict_author', 'gid' => $record->uid]);
+    $updated->condition('nid', $record->entity_id);
+    $updated->execute();
+    break;
+  } 
+
+}
+
+/**
+ * Implements hook_form()
+ */
+
+function fix_permissions_form($form, &$form_state) {
+
+  # Submit Button
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Fix Permissions'),
+    '#submit' => array('fix_permissions_form_submit'),
+  );
+  
+  return $form;
+  
 }
 
 /**
@@ -47,7 +97,7 @@ function thought_form($form, &$form_state) {
     '#type' => 'textfield',
     '#required' => TRUE,
     '#maxlength' => 200,
-    //'#title' => t("Prediction")
+    //'#title' => t("Thought")
   );
 
   # Turn off autocomplete to protect private information
@@ -122,10 +172,10 @@ function thought_form_submit($form, &$form_state) {
   $node->language = LANGUAGE_NONE;
   $node->uid = $user->uid;
   $node->field_private[$node->language][0]['value'] = $form_state['values']['private'];
-	$node->field_type[$node->language][] = array('value' => $triggering_element);
-	#$node->date = $form_state['values']['date'];
-	node_object_prepare($node);
-	node_save($node);
+  $node->field_type[$node->language][] = array('value' => $triggering_element);
+  #$node->date = $form_state['values']['date'];
+  node_object_prepare($node);
+  node_save($node);
 	
 	# Callback to User
 	user_post_callback($triggering_element, $node);
