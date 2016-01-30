@@ -225,7 +225,7 @@ function store_wordcounts($wordcounts, $uid) {
   foreach ($wordcounts->data->days as $day) {
     foreach ($day->word_list as $word) {
       $query = db_merge('word_counts');
-      $query->key(['uid' => $uid, 'word' => $word->word, 'date' => $day->date]);
+      $query->key(['uid' => $uid, 'word' => substr($word->word, 0, 32), 'date' => $day->date]);
       $query->fields([
         'count' => $word->count
       ]);
