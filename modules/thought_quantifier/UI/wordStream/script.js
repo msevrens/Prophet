@@ -198,6 +198,27 @@ buildWordStream = (function($){
 	      .attr("transform", "translate(0," + (contextHeight + axisHeight) + ")")
 	      .call(contextXAxis);
 
+	    // Top Word
+		focus.on("mouseover", function(d, i) {
+			var mousex = d3.mouse(this);
+      		mousex = mousex[0];
+      		var invertedx = d3.time.monday(focusScale.invert(mousex));
+      		for (var i=0; i<data.length; i++) {
+      			var date = format.parse(data[i]["Post Date"]);
+      			if (date.getTime() == invertedx.getTime()) {
+      				var value = 0;
+      				var word = ""
+      				for (var key in data[i]) {
+      					if (data[i][key] > value) {
+      						value = data[i][key]
+      						word = key
+      					}
+      				}
+      				console.log(word, value);
+      			}
+      		}
+		})
+
     	// Draw Streams
     	function streams(wordList) {
 
