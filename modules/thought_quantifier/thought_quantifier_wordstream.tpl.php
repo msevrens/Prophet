@@ -114,7 +114,7 @@
 </header>
 
 <div>
-  <?php print render($page['content']['thought_quantifier_word_stream_block']); ?>
+  <?php print render($page['content']); ?>
 </div>
 
 <footer class="footer container">
