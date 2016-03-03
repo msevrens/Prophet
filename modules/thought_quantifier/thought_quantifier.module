@@ -288,7 +288,7 @@ function store_wordcounts($wordcounts, $uid) {
 function query_prophet_mind($user) {
 
   # Send Thoughts to Prophet Mind  
-  $url = 'http://localhost:443/wordstream/';
+  $url = 'http://54.213.81.208:443/wordstream/';
   $options = array(
   'http' => array(
     'method'  => 'POST',

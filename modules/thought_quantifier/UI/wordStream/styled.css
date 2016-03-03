@@ -26,3 +26,7 @@ p {
   fill-opacity: .125;
   shape-rendering: crispEdges;
 }
+
+#load-thoughts {
+  margin: 15px 25px;
+}
