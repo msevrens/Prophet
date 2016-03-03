@@ -79,7 +79,9 @@ function thought_quantifier_theme($existing, $type, $theme, $path) {
  */
 
 function thought_quantifier_preprocess_page(&$variables, $hook) {
-  $variables['theme_hook_suggestions'][] = 'thought_quantifier_wordstream';
+  if($_GET['q'] == 'wordstream') {
+    $variables['theme_hook_suggestions'][] = 'thought_quantifier_wordstream';
+  }
 }
 
 /**
