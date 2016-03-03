@@ -31,7 +31,10 @@ function thought_quantifier_block_info() {
 
   $blocks['word_stream_block'] = array(
     'info' => t('Word Stream'),
-    'cache' => DRUPAL_CACHE_GLOBAL
+    'cache' => DRUPAL_CACHE_GLOBAL,
+    'region' => 'Content',
+    'visibility' => 1,
+    'pages' => 'wordstream'
   );
 
   return $blocks;
@@ -44,8 +47,7 @@ function thought_quantifier_block_info() {
 
 function thought_quantifier_menu() {
   $items['wordstream'] = array(
-    'title' => 'Word Stream',
-    'type' => MENU_NORMAL_ITEM,
+    'type' => MENU_CALLBACK,
     'page callback' => 'theme_wordstream_page',
     'access arguments' => array('access content'),
   );
@@ -64,12 +66,21 @@ function theme_wordstream_page() {
  * Implements hook_theme.
  */
 
-function thought_quantifier_theme() {
+function thought_quantifier_theme($existing, $type, $theme, $path) {
   return array(
     'thought_quantifier_wordstream' => array(
       'template' => 'thought_quantifier_wordstream',
+      'render element' => 'page'
     ),
   );
+}
+
+/**
+ * Implements hook_preprocess_page.
+ */
+
+function thought_quantifier_preprocess_page(&$variables, $hook) {
+  $variables['theme_hook_suggestions'][] = 'thought_quantifier_wordstream';
 }
 
 /**
