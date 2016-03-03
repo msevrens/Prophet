@@ -297,7 +297,26 @@ buildWordStream = (function($){
 
 		// Load Selected Thoughts
 		$("#load-thoughts").click(function(){
-			//alert("bound")
+
+			var url = "http://prophet.vision/",
+				dates = brush.extent();
+				format = d3.time.format("%Y-%m-%d"),
+				min = format(dates[0]),
+				max = format(dates[1])
+				words = $("select.multiselect").val();
+
+			url += "?created[min]=" + min + "&created[max]=" + max
+			url += "&title="
+			title_query = ""
+
+			for (var i = 0; i < words.length; i++) { 
+    			title_query += words[i] + "+";
+			}
+
+			url += title_query.substring(0, 128)
+
+			window.open(url, '_blank');
+
 		})
 
 		/* Creates a multiple selection widget

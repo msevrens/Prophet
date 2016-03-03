@@ -77,6 +77,14 @@
 	left: 35px;
 }
 
+#edit-created-wrapper {
+	display: none;
+}
+
+#edit-title-wrapper {
+	display: none;
+}
+
 #views-exposed-form-Bubble-Stream-block .views-submit-button {
 	position: relative;
 	top: -75px;
