@@ -39,6 +39,40 @@ function thought_quantifier_block_info() {
 }
 
 /**
+ * Implements hook_menu()
+ */
+
+function thought_quantifier_menu() {
+  $items['wordstream'] = array(
+    'title' => 'Word Stream',
+    'type' => MENU_NORMAL_ITEM,
+    'page callback' => 'theme_wordstream_page',
+    'access arguments' => array('access content'),
+  );
+  return $items;
+}
+
+/**
+ * Returns Markup for Page
+ */
+
+function theme_wordstream_page() {
+  return theme('thought_quantifier_wordstream');
+}
+
+/**
+ * Implements hook_theme.
+ */
+
+function thought_quantifier_theme() {
+  return array(
+    'thought_quantifier_wordstream' => array(
+      'template' => 'thought_quantifier_wordstream',
+    ),
+  );
+}
+
+/**
 * Implements hook_block_view().
 */
 
