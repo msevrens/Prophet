@@ -296,7 +296,9 @@ buildWordStream = (function($){
 		}
 
 		// Load Selected Thoughts
-		
+		$("#load-thoughts").click(function(){
+			//alert("bound")
+		})
 
 		/* Creates a multiple selection widget
 		for selection of ideas to display */

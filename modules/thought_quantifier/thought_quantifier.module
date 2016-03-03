@@ -175,7 +175,10 @@ function load_wordstream_markup() {
   # Convert to JSON
   $json_data = json_encode(array_values($formatted_data));
 
-  return '<div class="chart"></div><script>var streamData=' . $json_data . '; buildWordStream(streamData)' . '</script>';
+  # Build Markup
+  $chart = '<div class="chart"></div><script>var streamData=' . $json_data . '</script>';
+
+  return $chart;
 
 }
 

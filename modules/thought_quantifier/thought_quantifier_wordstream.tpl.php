@@ -115,9 +115,10 @@
 
 <div>
   <?php print render($page['content']['thought_quantifier_word_stream_block']); ?>
-  <button class="btn btn-default form-submit" id="load-thoughts" name="" value="Load Thoughts" type="submit">
+  <button class="btn btn-default form-submit" id="load-thoughts" name="" value="Load Thoughts">
     Load Thoughts
   </button>
+  <script>buildWordStream(streamData)</script>'
 </div>
 
 <footer class="footer container">
