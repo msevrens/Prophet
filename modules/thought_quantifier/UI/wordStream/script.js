@@ -293,6 +293,8 @@ buildWordStream = (function($){
 			// Exit
 			focusFlows.exit().remove();
 
+			focus.selectAll("path.layer").attr("stroke", function(d, i) { return color(i); })		
+
 			// Transition
 			focusFlows.transition()
 				.duration(1000)
@@ -304,7 +306,7 @@ buildWordStream = (function($){
 
 			function handleMouseOver(d, i) {
 				d3.select(this).style("fill", "#3d2e58")
-				tooltip.html("<p>" + d.key + "</p>").style("visibility", "visible");
+				tooltip.html("<p class='stream-tooltip'>" + d.key + "</p>").style("visibility", "visible");
 			}
 
 			function handleMouseOut(d, i) {

@@ -89,7 +89,7 @@ function load_wordstream_markup() {
   # $max_min_dates['min(date)'] = date('Y-m-d', strtotime("-1 year", time()));
 
   # Fetch Top Words and Max and Min Dates
-  $limit = ($user->uid == '12' ? 400 : 100);
+  $limit = ($user->uid == '12' ? 250 : 100);
   $main_query = 'select word, sum(count) from ubs_word_counts ';
   $where_condition = 'where uid = ' . $user->uid;
   #$where_condition = $where_condition . ' and date > ' . "'" . $max_min_dates['min(date)'] . "'"
