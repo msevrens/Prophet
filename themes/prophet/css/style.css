@@ -7,23 +7,39 @@
 
 /* New Front Page Design */
 
-.rate-widget-2 li.last {
-	/* display: none; */
-	opacity: 0.2;
-	height: 0px;
-	overflow: visible;
-	transition: opacity .2s;
+#edit-created-wrapper {
+	display: none;
 }
 
-.rate-widget-2 li.last:hover{
-	opacity: 0.8;
+.rate-widget-2 li .rate-emotion-btn {
+	text-indent: -9999px;
+	border: none;
+}
+
+.rate-widget-2 li.first .rate-emotion-btn{
+	background: url('./positive.png') rgb(237, 237, 237);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 10px;
+}
+
+.rate-widget-2 li.last .rate-emotion-btn{
+	background: url('./negative.png') rgb(237, 237, 237);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 10px;
+}
+
+.rate-widget-2 li.last {
+	height: 0px;
+	overflow: visible;
 }
 
 .thought-content .rate-widget {
 	padding-top: 2px;
 }
 
-.front #block-thought-thought-block {
+.front #block-predict-prediction-block {
 	margin: 60px auto;
 	width: 450px;
 	margin-bottom: 35px;
@@ -33,15 +49,15 @@
   display: none;
 }
 
-#block-views-bubble-stream-block .view-Bubble-Stream {
+.front .view-front-page-redesign {
 	font-family: 'Quicksand', sans-serif;
 }
 
-.front .view-Bubble-Stream .views-field-title {
+.front .view-front-page-redesign .views-field-title {
 	font-size: 22px;
 }
 
-.front #block-views-bubble-stream-block {
+.front #block-views-notification-stream-block {
 	width: 655px;
 	margin: 0 auto;
 }
@@ -58,12 +74,12 @@
 	font-size: 27px;
 }
 
-.view-Bubble-Stream .view-filters {
+.view-front-page-redesign .view-filters {
 	width: 190px;
 	margin-left: 20px;
 	border-left: solid 2px black;
 	border-top: solid 2px black;
-	height: 175px;
+	height: 240px;
 	border-top-left-radius: 35px;
 }
 
@@ -77,15 +93,13 @@
 	left: 35px;
 }
 
-#edit-created-wrapper {
-	display: none;
-}
-
 #edit-title-wrapper {
-	display: none;
+	position: relative;
+	top: -85px;
+	left: 35px;
 }
 
-#views-exposed-form-Bubble-Stream-block .views-submit-button {
+#views-exposed-form-front-page-redesign-block .views-submit-button {
 	position: relative;
 	top: -75px;
 	left: 35px;
@@ -108,8 +122,11 @@ a.logo img {
 	width: 30px;
 	display: block;
 	border-radius: 100px;
-	margin-right: 11px;
-	margin-top: 10px;
+	margin: 10px;
+	margin-right: 15px;
+	background: url("./stream-bubble.png");
+	background-repeat: no-repeat;
+	background-position: center;
 }
 
 .navbar.container {
@@ -186,43 +203,43 @@ a.logo img {
 	float: left;	
 }
 
-#block-views-bubble-stream-block {
+#block-views-front-page-redesign-block {
 	width: 655px;
 	margin: 0 auto;
 }
 
-#block-views-bubble-stream-block .form-control.form-select {
+#block-views-front-page-redesign-block .form-control.form-select {
 	height: auto;
 }
 
-#block-views-bubble-stream-block .views-row {
+#block-views-front-page-redesign-block .views-row {
 	margin-bottom: 15px;
 }
 
-#block-views-bubble-stream-block .view-content {
+#block-views-front-page-redesign-block .view-content {
 	 background-image: url("./2x2_black.gif");
 	 background-repeat: repeat-y;
 	 background-position: 20px 0px;
 }
 
-#block-views-bubble-stream-block .views-field-title a {
+#block-views-front-page-redesign-block .views-field-title a {
 	color: #222;
 }
 
-#block-views-bubble-stream-block div.rate-widget-2 ul li {
+#block-views-front-page-redesign-block div.rate-widget-2 ul li {
 	/* float: left; */
 	margin-right: 10px;
 }
 
-#block-views-bubble-stream-block div.rate-widget-2 ul {
+#block-views-front-page-redesign-block div.rate-widget-2 ul {
 	margin-bottom: 0;
 }
 
-#block-views-bubble-stream-block .rate-widget-fivestar ul {
+#block-views-front-page-redesign-block .rate-widget-fivestar ul {
 	padding-left: 0px;
 }
 
-#block-views-bubble-stream-block .block-title {
+#block-views-front-page-redesign-block .block-title {
 	width: 200px;
 	margin: 0 auto;
 	text-align: center;
@@ -231,6 +248,10 @@ a.logo img {
 }
 
 /* Misc */
+
+.user-picture img {
+	border-radius: 30px;
+}
 
 #navbar {
 	font-family: 'Quicksand', sans-serif;
@@ -305,8 +326,8 @@ a:visited {
 }
 
 .rate-widget-2 .rate-button {
-	width: 20px;	
-	height: 20px;
+	width: 19px;	
+	height: 19px;
 	border-radius: 100px;
 	padding-left: 4px;
 }
@@ -345,13 +366,17 @@ nav {
 	font-size: 16px;
 }
 
+header#navbar { 
+	padding: 0px 5px;
+}
+
 /* Callback Boxes */
 
 .alert-block.alert-success {
-	/*max-width: 275px;*/
+	max-width: 275px;
 	margin: 0 auto;
 	text-align: center;
-	/*text-transform: capitalize;*/
+	text-transform: capitalize;
 	font-family: Quicksand;
 	font-size: 15px;
 	border-radius: 12px;
@@ -385,7 +410,7 @@ nav {
 	margin: 3px;
 }
 
-#edit-thought-type-wrapper option[value="Predict"][selected] {
+#edit-thought-type-wrapper option[value="Predict"] {
 	background: #5a4e8c;
 }
 
@@ -405,6 +430,108 @@ nav {
 
 /* Mobile */
 
-@media screen and (max-width: 768px) {
-    
+@media only screen and (min-width: 240px) and (max-width: 650px) and (-webkit-min-device-pixel-ratio: 2) {
+	
+	.view-front-page-redesign .view-filters {
+		display: none;
+	}
+
+	#block-views-front-page-redesign-block .block-title {
+		margin: auto;
+		width: auto;
+		text-align: inherit;
+		font-size: 20px;
+	}
+
+	.front .view-front-page-redesign .views-field-title {
+		font-size: 14px;
+	}
+
+	#block-views-front-page-redesign-block .view-content {
+		background-position: 9px 0;
+	}
+
+	.thought-bubble div {
+		height: 20px;
+		width: 20px;
+		margin: 10px;
+		margin-left: 0px;
+	}
+
+	.front #block-predict-prediction-block {
+		margin: auto;
+		margin-bottom: 5px;
+	}
+
+	.row .section.col-sm-12 {
+		padding: 0px 5px;
+	}
+
+	.main-container {
+		padding: 0px 5px;
+	}
+
+	.thought-content .views-field-title {
+		max-width: 270px;
+		min-width: 0px;
+	}
+
+	.front #block-predict-prediction-block {
+		width: auto;
+	}
+
+	.navbar-brand {
+		padding-left: 0px;
+	}
+
+	.navbar a.logo {
+		margin-left: 20px;
+	}
+
+	#block-views-front-page-redesign-block .pagination {
+		display: inherit;
+	}
+
+	.thought-content .views-field-name {
+		margin-left: 15px;
+ 		font-size: 15px;
+	}
+
+	.rate-fivestar-btn-filled {
+		height: 12px;
+		width: 12px;
+	}
+
+	.rate-fivestar-btn-empty {
+		height: 12px;
+		width: 12px;
+	}
+
+	.thought-content.ask .views-field-name {
+  		margin-left: 155px;
+	}
+
+	#block-views-front-page-redesign-block {
+		max-width: 420px;
+	}
+
+	.thought-bubble .private {
+		background-image: url('private_mobile.png');
+		background-position: center;
+		background-size: 14px;
+	}
+
+	.alert-block.alert-success {
+		margin-bottom: 25px;
+	}
+
+	.thought-content .views-field-name {
+		max-width: 130px;
+		overflow: hidden;
+	}
+
+	#edit-created-wrapper {
+		display: none;
+	}
+
 }
