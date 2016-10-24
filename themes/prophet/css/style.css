@@ -12,6 +12,15 @@
 
 /* New Front Page Design */
 
+.no-thoughts {
+	font-family: Quicksand;
+    width: 400px;
+    font-size: 18px;
+    text-align: center;
+    margin: 125px auto;
+    color: #616060;
+}
+
 #edit-created-wrapper {
 	display: none;
 }
@@ -171,6 +180,12 @@ a.logo img {
 .thought-bubble, .thought-content {
 	float: left;
 	background: white;
+}
+
+@-moz-document url-prefix() { 
+	#block-views-front-page-redesign-block .view-filters {
+		height: inherit !important;
+	}
 }
 
 .thought-content .views-field-title {
