@@ -86,13 +86,13 @@ function load_wordstream_markup() {
 
   # Get Max Date
   $max_min_dates = db_query('select max(date), min(date) from ubs_word_counts where uid = ' . $user->uid)->fetchAssoc();
-  $max_min_dates['min(date)'] = date('Y-m-d', strtotime("-1 year", time()));
+  # $max_min_dates['min(date)'] = date('Y-m-d', strtotime("-1 year", time()));
 
   # Fetch Top Words and Max and Min Dates
   $limit = ($user->uid == '12' ? 250 : 100);
   $main_query = 'select word, sum(count) from ubs_word_counts ';
   $where_condition = 'where uid = ' . $user->uid;
-  $where_condition = $where_condition . ' and date > ' . "'" . $max_min_dates['min(date)'] . "'"
+  #$where_condition = $where_condition . ' and date > ' . "'" . $max_min_dates['min(date)'] . "'";
   $groupby_and_orderby = ' group by word order by sum(count) desc limit ' . $limit;
   $result = db_query($main_query . $where_condition . $groupby_and_orderby);
   $top_words = array_keys($result->fetchAllAssoc('word'));
@@ -103,7 +103,7 @@ function load_wordstream_markup() {
 
   # Fetch Word Counts
   $query = db_select('word_counts', 'w');
-  $query->condition('w.date', $max_min_dates['min(date)'], '>');
+  #$query->condition('w.date', $max_min_dates['min(date)'], '>');
   $query->condition('w.uid', $user->uid, '=')->fields('w', array('date', 'word', 'count'));
 
   # Limit By Top Words
@@ -165,6 +165,7 @@ function load_wordstream_markup() {
 */
 
 function thought_quantifier_form_submit($form, &$form_state) {
+  //Truncate table word_counts;
   $result = fetch_todays_thoughts();
   wordstream_process($result);
 }
@@ -179,6 +180,12 @@ function thought_quantifier_form($form, &$form_state) {
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Process Thoughts'),
+    '#submit' => array('thought_quantifier_form_submit'),
+  );
+
+  $form['purge'] = array(
+    '#type' => 'submit',
+    '#value' => t('Purge Stream'),
     '#submit' => array('thought_quantifier_form_submit'),
   );
   
