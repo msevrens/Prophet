@@ -89,7 +89,7 @@ function load_wordstream_markup() {
   # $max_min_dates['min(date)'] = date('Y-m-d', strtotime("-1 year", time()));
 
   # Fetch Top Words and Max and Min Dates
-  $limit = ($user->uid == '12' ? 250 : 100);
+  $limit = ($user->uid == '12' ? 400 : 250);
   $main_query = 'select word, sum(count) from ubs_word_counts ';
   $where_condition = 'where uid = ' . $user->uid;
   #$where_condition = $where_condition . ' and date > ' . "'" . $max_min_dates['min(date)'] . "'";
@@ -165,9 +165,24 @@ function load_wordstream_markup() {
 */
 
 function thought_quantifier_form_submit($form, &$form_state) {
-  //Truncate table word_counts;
-  $result = fetch_todays_thoughts();
-  wordstream_process($result);
+
+
+  $triggering_element = $form_state['triggering_element']['#value'];
+
+  switch ($triggering_element) {
+    case 'Process Thoughts':
+      $result = fetch_todays_thoughts();
+      wordstream_process($result);
+      parse_trackables($result);
+      break;
+    case 'Purge Stream':
+      dpm("Purge Stream");
+      //Truncate table word_counts;
+      break;
+    default:
+      break;
+  }
+
 }
 
 /**
@@ -222,6 +237,14 @@ function fetch_todays_thoughts() {
   $result = $query->execute();
 
   return $result;
+
+}
+
+/**
+ * Run code to parse thoughts for trackables
+ */
+
+function parse_trackables($result) {
 
 }
 
