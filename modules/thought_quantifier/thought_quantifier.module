@@ -249,19 +249,26 @@ function fetch_todays_thoughts() {
 function parse_trackables($result) {
 
   $hashtag_pattern = "/\#[a-zA-Z]+:? \d+\.?\d?/";
-  $users = [];
+  $values = [];
 
   foreach ($result as $record) {
 
-    if (preg_match_all($hashtag_pattern, $record->title, $matches_out)) {
-      array_push($users, $record->title);
+    $date = date('Y-m-d', $record->created);
+
+    if (!array_key_exists($date, $values)) {
+      $values[$date] = [];
     }
 
-    $date = date('Y-m-d', $record->created);
+    if (preg_match_all($hashtag_pattern, $record->title, $matches_out)) {
+      foreach ($matches_out[0] as $match) {
+        $parts = preg_split('/\s+/', $match);
+        array_push($values[$date], ["tag" => $parts[0], "value" => $parts[1]]);
+      }
+    }
 
   }
 
-  #dpm($users);
+  dpm($values);
   dpm("Trackables Parsed");
 
 }
