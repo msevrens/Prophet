@@ -173,6 +173,8 @@ function thought_quantifier_form_submit($form, &$form_state) {
     case 'Process Thoughts':
       $result = fetch_todays_thoughts();
       wordstream_process($result);
+      # TODO: Reuse result
+      $result = fetch_todays_thoughts();
       parse_trackables($result);
       break;
     case 'Purge Stream':
@@ -245,6 +247,22 @@ function fetch_todays_thoughts() {
  */
 
 function parse_trackables($result) {
+
+  $hashtag_pattern = "/\#[a-zA-Z]+:? \d+\.?\d?/";
+  $users = [];
+
+  foreach ($result as $record) {
+
+    if (preg_match_all($hashtag_pattern, $record->title, $matches_out)) {
+      array_push($users, $record->title);
+    }
+
+    $date = date('Y-m-d', $record->created);
+
+  }
+
+  #dpm($users);
+  dpm("Trackables Parsed");
 
 }
 
