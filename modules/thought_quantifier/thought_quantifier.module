@@ -263,11 +263,13 @@ function parse_trackables($result) {
       foreach ($matches_out[0] as $match) {
         $parts = preg_split('/\s+/', $match);
         $tag = str_replace(":", "", $parts[0]);
-        array_push($values[$date], ["tag" => strtolower($tag), "value" => $parts[1]]);
+        array_push($values[$date], ["tag" => $tag, "value" => $parts[1], "uid" => $record->uid]);
       }
     }
 
   }
+
+  # TODO: Save parsed values to database
 
   dpm($values);
   dpm("Trackables Parsed");
