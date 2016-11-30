@@ -6,12 +6,12 @@ p {
   font: 12px helvetica;
 }
 
-svg {
-  float: right;
-}
-
 .chart { 
   background: #fff;
+}
+
+.mood-chart svg {
+  margin-left: 15px;
 }
 
 .axis path, .axis line {
@@ -60,4 +60,13 @@ svg {
 .brush .extent {
   fill-opacity: .125;
   shape-rendering: crispEdges;
+}
+
+.no-thoughts {
+  width: 365px;
+  font-family: 'Quicksand', sans-serif;
+  color: #555;
+  font-size: 20px;
+  text-align: center;
+  margin: 150px auto;
 }

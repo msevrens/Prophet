@@ -187,6 +187,12 @@ buildWordStream = (function($){
 
 		// Nest, Area and Stack
 		var stack = d3.layout.stack()
+			.offset("expand")
+			.values(function(d) { return d.values; })
+			.x(function(d) { return d.date; })
+			.y(function(d) { return d.value; });
+
+		var silhouetteStack = d3.layout.stack()
 			.offset("silhouette")
 			.values(function(d) { return d.values; })
 			.x(function(d) { return d.date; })
@@ -250,7 +256,7 @@ buildWordStream = (function($){
 
 			// Format Data
 			var formattedContext = formatData(contextData, ["Total"])
-				contextLayer = stack(nest.entries(formattedContext)),
+				contextLayer = silhouetteStack(nest.entries(formattedContext)),
 				formattedFocus = formatData(lata, wordList),
 				focusLayers = stack(nest.entries(formattedFocus));
 
