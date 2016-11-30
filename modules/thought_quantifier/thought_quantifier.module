@@ -167,10 +167,12 @@ function thought_quantifier_block_view($delta = '') {
 
 function load_mood_markup() {
 
+  //return '<div class="mood-chart">MOOD</div>';
+
   global $user;
 
   # Get Max Date
-  $max_min_dates = db_query('select max(date), min(date) from trackables where uid = ' . $user->uid)->fetchAssoc();
+  $max_min_dates = db_query('select max(date), min(date) from ubs_trackables where uid = ' . $user->uid)->fetchAssoc();
 
   # Fetch Trackable Values
   $query = db_select('trackables', 'w');
@@ -298,13 +300,13 @@ function thought_quantifier_form_submit($form, &$form_state) {
       parse_trackables($result);
       break;
     case 'Purge Stream':
-      $result = db_truncate('word_counts')->execute();
-      $result = db_truncate('trackables')->execute();
+      $result = db_truncate('ubs_word_counts')->execute();
+      $result = db_truncate('ubs_trackables')->execute();
       dpm("Purge Stream");
       //Truncate table word_counts;
       break;
     case 'Reprocess Stream':
-      $drop = db_truncate('word_counts')->execute();
+      $drop = db_truncate('ubs_word_counts')->execute();
       $result = fetch_all_thoughts();
       wordstream_process($result);
       $result = fetch_all_thoughts();
@@ -434,7 +436,7 @@ function store_tagcounts($tagcounts) {
 
   foreach ($tagcounts as $date => $records) {
     foreach ($records as $record) {
-      $query = db_merge('trackables');
+      $query = db_merge('ubs_trackables');
       $query->key(['uid' => $record['uid'], 'tag' => substr($record['tag'], 0, 32), 'date' => $date]);
       $query->fields([
         'value' => $record['value']

@@ -329,6 +329,15 @@ buildWordStream = (function($){
 			focus.select(".x.axis").call(focusXAxis);
 		}
 
+		// Create Load Thoughts Button
+		d3.select("#block-thought-quantifier-word-stream-block")
+			.append("button")
+			.attr("class", "btn btn-default form-submit")
+			.attr("id", "load-thoughts")
+			.attr("value", "Load Thoughts")
+			.attr("name", "")
+			.html("Load Thoughts")
+
 		// Load Selected Thoughts
 		$("#load-thoughts").click(function(){
 
