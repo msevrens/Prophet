@@ -168,7 +168,7 @@ buildMoodTracker = (function($){
 
 		// Line 
 		var line = d3.svg.line()
-			.interpolate(movingAvg(1))
+			.interpolate(movingAvg(4))
 			.x(function(d) { return x(d.date); })
 			.y(function(d) { return mY(d.value); });
 

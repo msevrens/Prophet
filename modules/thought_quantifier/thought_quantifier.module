@@ -32,7 +32,9 @@ function thought_quantifier_block_info() {
 
   $blocks['word_stream_block'] = array(
     'info' => t('Word Stream'),
-    'cache' => DRUPAL_CACHE_GLOBAL
+    'cache' => DRUPAL_CACHE_GLOBAL,
+    'visibility' => 1,
+    'pages' => 'wordstream'
   );
 
   $blocks['mood_tracker_block'] = array(
@@ -416,6 +418,9 @@ function parse_trackables($result) {
       foreach ($matches_out[0] as $match) {
         $parts = preg_split('/\s+/', $match);
         $tag = str_replace(":", "", $parts[0]);
+        if ($tag == "#happy") {
+          $tag = "#mood";
+        }
         array_push($values[$date], ["tag" => $tag, "value" => $parts[1], "uid" => $record->uid]);
       }
     }
