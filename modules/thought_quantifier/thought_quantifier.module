@@ -35,8 +35,78 @@ function thought_quantifier_block_info() {
     'cache' => DRUPAL_CACHE_GLOBAL
   );
 
+  $blocks['mood_tracker_block'] = array(
+    'info' => t('Mood Tracker'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+    'region' => 'Content',
+    'visibility' => 1,
+    'pages' => 'moodtracker'
+  );
+
   return $blocks;
 
+}
+
+/**
+ * Implements hook_menu()
+ */
+
+function thought_quantifier_menu() {
+  $items['wordstream'] = array(
+    'type' => MENU_CALLBACK,
+    'page callback' => 'theme_wordstream_page',
+    'access arguments' => array('access content'),
+  );
+  $items['moodtracker'] = array(
+    'type' => MENU_CALLBACK,
+    'page callback' => 'theme_moodtracker_page',
+    'access arguments' => array('access content'),
+  );
+  return $items;
+}
+
+/**
+ * Returns Markup for Mood Tracker
+ */
+
+function theme_moodtracker_page() {
+  return theme('thought_quantifier_moodtracker');
+}
+
+/**
+ * Returns Markup for Word Stream
+ */
+
+function theme_wordstream_page() {
+  return theme('thought_quantifier_wordstream');
+}
+
+/**
+ * Implements hook_theme.
+ */
+
+function thought_quantifier_theme($existing, $type, $theme, $path) {
+  return array(
+    'thought_quantifier_wordstream' => array(
+      'template' => 'thought_quantifier_wordstream'
+    ),
+    'thought_quantifier_moodtracker' => array(
+      'template' => 'thought_quantifier_moodtracker'
+    ),
+  );
+}
+
+/**
+ * Implements hook_preprocess_page.
+ */
+
+function thought_quantifier_preprocess_page(&$variables, $hook) {
+  if($_GET['q'] == 'wordstream') {
+    $variables['theme_hook_suggestions'][] = 'thought_quantifier_wordstream';
+  }
+  if($_GET['q'] == 'moodtracker') {
+    $variables['theme_hook_suggestions'][] = 'thought_quantifier_moodtracker';
+  }
 }
 
 /**
@@ -70,9 +140,61 @@ function thought_quantifier_block_view($delta = '') {
         ]
       ];
       break;
+    case 'mood_tracker_block':
+      $block['subject'] = '';
+      $block['content'] = [
+        '#markup' => load_mood_markup(),
+        '#attached' => [
+          'js' => [
+            'http://d3js.org/d3.v2.js',
+            $m_path . '/UI/moodTracker/script.js'
+          ],
+          'css' => [
+            $m_path . '/UI/moodTracker/styled.css',
+          ]
+        ]
+      ];
+      break;
   }
 
   return $block;
+
+}
+
+/**
+* Load Mood Stream Data and Produce Markup
+*/
+
+function load_mood_markup() {
+
+  global $user;
+
+  # Get Max Date
+  $max_min_dates = db_query('select max(date), min(date) from trackables where uid = ' . $user->uid)->fetchAssoc();
+
+  # Fetch Trackable Values
+  $query = db_select('trackables', 'w');
+  $query->condition('w.uid', $user->uid, '=')->fields('w', array('date', 'tag', 'value'));
+
+  # Limit By Top Words
+  $db_or = db_or();
+  $db_or->condition('w.tag', "#mood", '=');
+  $query->condition($db_or);
+
+  $result = $query->execute();
+  $formatted_data = [];
+
+  foreach ($result as $record) {
+    array_push($formatted_data, $record);
+  }
+
+  if (count($formatted_data) < 5) {
+    return "<div class='no-thoughts'>Insufficient mood data available. Track mood via <strong>#mood: [0-10]</strong>. This visualization updates at midnight</div>";
+  }
+
+  $json_data = json_encode(array_values($formatted_data));
+
+  return '<div class="mood-chart"></div><script>var moodData=' . $json_data . '</script>';
 
 }
 
@@ -166,20 +288,28 @@ function load_wordstream_markup() {
 
 function thought_quantifier_form_submit($form, &$form_state) {
 
-
   $triggering_element = $form_state['triggering_element']['#value'];
 
   switch ($triggering_element) {
-    case 'Process Thoughts':
+    case "Process Today's Thoughts":
       $result = fetch_todays_thoughts();
       wordstream_process($result);
-      # TODO: Reuse result
       $result = fetch_todays_thoughts();
       parse_trackables($result);
       break;
     case 'Purge Stream':
+      $result = db_truncate('word_counts')->execute();
+      $result = db_truncate('trackables')->execute();
       dpm("Purge Stream");
       //Truncate table word_counts;
+      break;
+    case 'Reprocess Stream':
+      $drop = db_truncate('word_counts')->execute();
+      $result = fetch_all_thoughts();
+      wordstream_process($result);
+      $result = fetch_all_thoughts();
+      parse_trackables($result);
+      dpm("Reprocess Stream");
       break;
     default:
       break;
@@ -196,13 +326,19 @@ function thought_quantifier_form($form, &$form_state) {
   # Submit Button
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Process Thoughts'),
+    '#value' => t("Process Today's Thoughts"),
     '#submit' => array('thought_quantifier_form_submit'),
   );
 
   $form['purge'] = array(
     '#type' => 'submit',
     '#value' => t('Purge Stream'),
+    '#submit' => array('thought_quantifier_form_submit'),
+  );
+
+  $form['reprocess'] = array(
+    '#type' => 'submit',
+    '#value' => t('Reprocess Stream'),
     '#submit' => array('thought_quantifier_form_submit'),
   );
   
@@ -220,6 +356,21 @@ function fetch_yesterdays_thoughts() {
   $query = db_select('node', 'n');
   $query->condition('n.type', 'thought', '=')->fields('n', array('title', 'uid', 'created'));
   $query->condition('created', array(strtotime("yesterday 0:00"), strtotime("today 0:00")), 'BETWEEN');
+  $result = $query->execute();
+
+  return $result;
+
+}
+
+/**
+ * Get All Thoughts
+ */
+
+function fetch_all_thoughts() {
+
+  # Get Thoughts from Database
+  $query = db_select('node', 'n');
+  $query->condition('n.type', 'thought', '=')->fields('n', array('title', 'uid', 'created'));
   $result = $query->execute();
 
   return $result;
@@ -270,9 +421,27 @@ function parse_trackables($result) {
   }
 
   # TODO: Save parsed values to database
-
-  dpm($values);
+  store_tagcounts($values);
   dpm("Trackables Parsed");
+
+}
+
+/**
+ * Save Tag Counts to Database
+ */
+
+function store_tagcounts($tagcounts) {
+
+  foreach ($tagcounts as $date => $records) {
+    foreach ($records as $record) {
+      $query = db_merge('trackables');
+      $query->key(['uid' => $record['uid'], 'tag' => substr($record['tag'], 0, 32), 'date' => $date]);
+      $query->fields([
+        'value' => $record['value']
+      ]);
+      $query->execute();
+    }
+  }
 
 }
 
