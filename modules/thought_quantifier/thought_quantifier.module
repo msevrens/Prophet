@@ -484,7 +484,7 @@ function store_tagcounts($tagcounts) {
   foreach ($tagcounts as $date => $records) {
     foreach ($records as $record) {
       $query = db_merge('trackables');
-      $query->key(['uid' => $record['uid'], 'tag' => substr($record['tag'], 0, 32), 'date' => $date]);
+      $query->key(['uid' => $record['uid'], 'tag' => strtolower(substr($record['tag'], 0, 32)), 'date' => $date]);
       $query->fields([
         'value' => $record['value']
       ]);
