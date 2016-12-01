@@ -196,7 +196,16 @@ function load_mood_markup() {
     return "<div class='no-thoughts'>Insufficient mood data available. Track mood via <strong>#mood: [0-10]</strong>. This visualization updates at midnight</div>";
   }
 
-  $json_data = json_encode(array_values($formatted_data));
+  # Group by Week or by Day
+  $date_range = strtotime($max_min_dates['max(date)']) - strtotime($max_min_dates['min(date)']);
+  $days_in_data = floor($date_range/(60*60*24));
+
+  # TODO: Group By Week
+  if ($days_in_data < 60) {
+    $json_data = json_encode(array_values($formatted_data));
+  } else {
+    $json_data = json_encode(array_values($formatted_data));
+  }
 
   return '<div class="mood-chart"></div><script>var moodData=' . $json_data . '</script>';
 
@@ -404,6 +413,7 @@ function fetch_todays_thoughts() {
 function parse_trackables($result) {
 
   $hashtag_pattern = "/\#[a-zA-Z]+:? \d+\.?\d?/";
+  $pat_pattern = "/HL \d+\.?\d?/";
   $values = [];
 
   foreach ($result as $record) {
@@ -421,6 +431,12 @@ function parse_trackables($result) {
         if ($tag == "#happy") {
           $tag = "#mood";
         }
+        array_push($values[$date], ["tag" => $tag, "value" => $parts[1], "uid" => $record->uid]);
+      }
+    } elseif (preg_match_all($pat_pattern, $record->title, $matches_out)) {
+      foreach ($matches_out[0] as $match) {
+        $parts = preg_split('/\s+/', $match);
+        $tag = "#mood";
         array_push($values[$date], ["tag" => $tag, "value" => $parts[1], "uid" => $record->uid]);
       }
     }
