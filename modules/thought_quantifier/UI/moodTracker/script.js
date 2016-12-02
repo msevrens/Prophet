@@ -105,6 +105,7 @@ buildMoodTracker = (function($){
 
 		var margin = 15,
 			width = window.innerWidth - margin,
+			fatLineWidth = width / 35,
 			height = window.innerHeight / 2.5,
 			faceSize = 70;
 			legendWidth = 100,
@@ -175,10 +176,12 @@ buildMoodTracker = (function($){
 		// TODO: Load prophet thoughts via brush selection
 
 		// Scatterplot
+		var dotSize = (width > 800) ? 2 : 1; 
+
 		svg.selectAll("dot")
 			.data(mood)
 			.enter().append("circle")
-			.attr("r", 2)
+			.attr("r", dotSize)
 			.attr("cx", function(d) { return x(d.date); })
 			.attr("cy", function(d) { return mY(d.value); });
 		
@@ -195,6 +198,7 @@ buildMoodTracker = (function($){
 		field.append("path")
 			.datum(mood)
 			.attr("class", "fat-line")
+			.attr("stroke-width", fatLineWidth + "px")
 			.attr("d", line);
 
 		var path = field.append("path")
