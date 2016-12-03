@@ -118,12 +118,9 @@ global $user;
 
 <div>
   <?php print render($page['content']); ?>
-  <?php if ($logged_in AND ($user->uid == '12' OR $user->uid == '74')): ?>
-    <button class="btn btn-default form-submit" id="load-thoughts" name="<?php print $user->name; ?>" value="Load Thoughts">
-      Load Thoughts
-    </button>
+  <?php if ($logged_in): ?>
+    <script>buildWordStream(streamData)</script>
   <?php endif; ?>
-  <script>buildWordStream(streamData)</script>
 </div>
 <footer class="footer container">
   <?php print render($page['footer']); ?>
