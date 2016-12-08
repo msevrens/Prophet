@@ -182,6 +182,7 @@ function load_mood_markup() {
 
   $tag = ($_GET["tag"] ? "#" . $_GET["tag"] : "#mood");
   $method = ($_GET["method"] ? $_GET["method"] : "average");
+  $groupby = ($_GET["groupby"] ? $_GET["groupby"] : "week");
 
   # Limit By Top Words
   $db_or = db_or();
@@ -216,6 +217,7 @@ function load_mood_markup() {
     foreach ($formatted_data as $row) {
       $date = strtotime($row->date);
       $week = strtotime('monday this week', $date);
+      $week = ($groupby == "week" ? $week : $date);
       if (array_key_exists(date('Y-m-d', $week), $grouped)) {
         array_push($grouped[date('Y-m-d', $week)], floatval($row->value));
       } else {
