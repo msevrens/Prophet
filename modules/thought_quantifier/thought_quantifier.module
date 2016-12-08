@@ -347,6 +347,7 @@ function thought_quantifier_form_submit($form, &$form_state) {
       break;
     case 'Reprocess Stream':
       $drop = db_truncate('word_counts')->execute();
+      $result = db_truncate('trackables')->execute();
       $result = fetch_all_thoughts();
       wordstream_process($result);
       $result = fetch_all_thoughts();
@@ -447,7 +448,7 @@ function parse_trackables($result) {
 
   foreach ($result as $record) {
 
-    $date = date('Y-m-d', $record->created);
+    $date = date('Y-m-d H:i:s', $record->created);
 
     if (!array_key_exists($date, $values)) {
       $values[$date] = [];
