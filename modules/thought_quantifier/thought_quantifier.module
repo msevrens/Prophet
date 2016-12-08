@@ -180,9 +180,12 @@ function load_mood_markup() {
   $query = db_select('trackables', 'w');
   $query->condition('w.uid', $user->uid, '=')->fields('w', array('date', 'tag', 'value'));
 
+  $tag = ($_GET["tag"] ? "#" . $_GET["tag"] : "#mood");
+  $method = ($_GET["method"] ? $_GET["method"] : "average");
+
   # Limit By Top Words
   $db_or = db_or();
-  $db_or->condition('w.tag', "#mood", '=');
+  $db_or->condition('w.tag', $tag, '=');
   $query->condition($db_or);
 
   $result = $query->execute();
@@ -224,8 +227,9 @@ function load_mood_markup() {
     $weekly = [];
     foreach ($grouped as $key => $value) {
       $average = array_sum($value) / count($value);
-      //$sum = array_sum($value);
-      array_push($weekly, ['tag' =>  '#mood', 'value' => $average, 'date' => $key]);
+      $sum = array_sum($value);
+      $value = ($method == "sum" ? $sum : $average);
+      array_push($weekly, ['tag' =>  '#mood', 'value' => $value, 'date' => $key]);
     }
 
     $json_data = json_encode($weekly);

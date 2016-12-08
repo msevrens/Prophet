@@ -250,5 +250,5 @@ function predict_node_access_records($node) {
 }
 
 function predict_form_thought_node_form_alter(&$form, &$form_state) {
-  $form['title']['#maxlength'] = 200;
+  $form['title']['#maxlength'] = 256;
 }
