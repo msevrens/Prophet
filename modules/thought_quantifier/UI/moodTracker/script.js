@@ -12,6 +12,18 @@ buildMoodTracker = (function($){
 	
 	var states = [depressed, sad, unpleasant, neutral, pleasant, happy, beaming];
 
+	/* Update URL Parameters */
+	function updateURL(uri, key, value) {
+		var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");	
+		var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+		if (uri.match(re)) {
+			return uri.replace(re, '$1' + key + "=" + value + '$2');
+		}
+		else {
+			return uri + separator + key + "=" + value;
+		}
+	}
+
 	/* Find intermediate states between paths */
 	function pathTween(d1, precision) {
 		return function() {
@@ -58,8 +70,7 @@ buildMoodTracker = (function($){
 
 	}
 
-	/* Prepare data for visualization */
-
+	/* Prepare Data for Visualization */
 	function formatData(data) {
 
 		var mood = [],
@@ -81,7 +92,8 @@ buildMoodTracker = (function($){
 
 	}
 
-	movingAvg = function(n) {
+	/* Calculate Moving Average */
+	function movingAvg(n) {
 		return function (points) {
 			points = points.map(function(each, index, array) {
 				var to = index + n - 1;
@@ -99,7 +111,23 @@ buildMoodTracker = (function($){
 		}
 	}
 
-	function buildStream(data) {
+	function updateChart() {
+
+		var tag = $("select.tag-list").val(),
+			method = $("input.method-toggle").val(),
+			groupby = $("input.groupby-toggle").val(),
+			url = updateURL(window.location.href, "tag", tag.substring(1));
+
+		method = method == "on" ? "sum" : "average"
+		groupby = groupby == "on" ? "weekly" : "daily"
+		url = updateURL(url, "method", method);
+		url = updateURL(url, "groupby", groupby);
+
+		window.location.href = url;
+
+	}
+
+	function buildChart(data) {
 
 		globalData = data;
 
@@ -121,20 +149,23 @@ buildMoodTracker = (function($){
 			.attr("height", height)
 			.attr("width", faceSize);
 
+		// Set Up Controls
 		/*
-
 		var tagList = d3.select(".mood-chart").append("select")
-			.attr("class", "form-control form-control-sm")
+			.attr("class", "form-control form-control-sm tag-list")
+			.on("change", updateChart)
 			.style("float", "left")
 			.style("width", "130px")
 			.style("margin", "15px")
-			.selectAll("option")
+
+		var options = tagList.selectAll("option")
 			.data(trackables.reverse())
 			.enter()
 			.append("option")
 			.text(function(d){return d});
 
 		var methodSelect = d3.select(".mood-chart").append("input")
+			.attr("class", "method-toggle")
 			.style("margin", "15px")
 			.attr("type", "checkbox")
 			.attr("data-toggle", "toggle")
@@ -142,12 +173,16 @@ buildMoodTracker = (function($){
 			.attr("data-off", "Average")
 
 		var groupbyToggle = d3.select(".mood-chart").append("input")
+			.attr("class", "groupby-toggle")
 			.style("margin", "15px")
 			.attr("type", "checkbox")
 			.attr("data-toggle", "toggle")
 			.attr("data-on", "Weekly")
 			.attr("data-off", "Daily")
 
+		// Set Listeners
+		$('.groupby-toggle').change(updateChart)
+		$('.method-toggle').change(updateChart)
 		*/
 
 		legend.append("circle")
@@ -316,6 +351,6 @@ buildMoodTracker = (function($){
 
 	}
 
-	return buildStream
+	return buildChart
 
 })(jQuery);
