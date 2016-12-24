@@ -121,6 +121,35 @@ buildMoodTracker = (function($){
 			.attr("height", height)
 			.attr("width", faceSize);
 
+		/*
+
+		var tagList = d3.select(".mood-chart").append("select")
+			.attr("class", "form-control form-control-sm")
+			.style("float", "left")
+			.style("width", "130px")
+			.style("margin", "15px")
+			.selectAll("option")
+			.data(trackables.reverse())
+			.enter()
+			.append("option")
+			.text(function(d){return d});
+
+		var methodSelect = d3.select(".mood-chart").append("input")
+			.style("margin", "15px")
+			.attr("type", "checkbox")
+			.attr("data-toggle", "toggle")
+			.attr("data-on", "Sum")
+			.attr("data-off", "Average")
+
+		var groupbyToggle = d3.select(".mood-chart").append("input")
+			.style("margin", "15px")
+			.attr("type", "checkbox")
+			.attr("data-toggle", "toggle")
+			.attr("data-on", "Weekly")
+			.attr("data-off", "Daily")
+
+		*/
+
 		legend.append("circle")
 			.attr("class", "face")
 			.attr("fill", "#e8e8e8")

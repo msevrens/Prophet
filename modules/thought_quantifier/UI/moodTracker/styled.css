@@ -61,6 +61,11 @@ p {
   shape-rendering: crispEdges;
 }
 
+.toggle {
+    margin: 15px;
+    margin-left: 0px;
+}
+
 .no-thoughts {
   width: 365px;
   font-family: 'Quicksand', sans-serif;
