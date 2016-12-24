@@ -149,10 +149,12 @@ function thought_quantifier_block_view($delta = '') {
         '#attached' => [
           'js' => [
             'http://d3js.org/d3.v2.js',
+            $m_path . '/UI/wordStream/bootstrap-multiselect.js',
             $m_path . '/UI/moodTracker/script.js'
           ],
           'css' => [
             $m_path . '/UI/moodTracker/styled.css',
+            $m_path . '/UI/wordStream/bootstrap-multiselect.css'
           ]
         ]
       ];
