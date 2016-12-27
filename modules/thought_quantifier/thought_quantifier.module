@@ -171,15 +171,20 @@ function thought_quantifier_block_view($delta = '') {
 
 function load_mood_markup() {
 
-  //return '<div class="mood-chart">MOOD</div>';
-
   global $user;
 
-  $main_query = 'select tag from ubs_trackables ';
+  $main_query = 'select tag, count(tag) from ubs_trackables ';
   $where_condition = 'where uid = ' . $user->uid;
   $groupby = ' group by tag order by count(tag)';
   $result = db_query($main_query . $where_condition . $groupby);
-  $top_tags = array_keys($result->fetchAllAssoc('tag'));
+  $top_tags = [];
+
+  foreach ($result as $record) {
+    $record_arr = get_object_vars($record);
+    if ($record_arr['count(tag)'] > 5) {
+      array_push($top_tags, $record_arr['tag']);
+    }
+  }
 
   # Get Max Date
   $max_min_dates = db_query('select max(date), min(date) from ubs_trackables where uid = ' . $user->uid)->fetchAssoc();
