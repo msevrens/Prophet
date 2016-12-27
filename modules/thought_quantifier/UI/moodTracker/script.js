@@ -161,9 +161,8 @@ buildMoodTracker = (function($){
 
 		// Set Up Controls
 
-		/*
 		var tagDefault = getURLParameter("tag") ? getURLParameter("tag") : "mood",
-			groupbyDefault = getURLParameter("groupby") ? getURLParameter("groupby") : "daily",
+			groupbyDefault = getURLParameter("groupby") ? getURLParameter("groupby") : "week",
 			groupbyDefault = groupbyDefault == "week" ? true : false,
 			methodDefault = getURLParameter("method") ? getURLParameter("method") : "average",
 			methodDefault = methodDefault == "sum" ? true : false;
@@ -202,19 +201,18 @@ buildMoodTracker = (function($){
 			.attr("data-on", "Weekly")
 			.attr("data-off", "Daily")
 
+		/*
 		var maxMinToggle = d3.select(".mood-chart").append("input")
 			.attr("class", "max-min-toggle")
 			.style("margin", "15px")
 			.attr("type", "checkbox")
 			.attr("data-toggle", "toggle")
-			.attr("data-on", "Maximize")
-			.attr("data-off", "Minimize") 
+			.attr("data-on", ":)")
+			.attr("data-off", ":(") */
 
 		// Set Listeners
 		$('.groupby-toggle').change(updateChart)
 		$('.method-toggle').change(updateChart)
-
-		*/
 
 		legend.append("circle")
 			.attr("class", "face")
