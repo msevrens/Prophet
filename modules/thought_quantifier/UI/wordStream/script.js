@@ -185,6 +185,28 @@ buildWordStream = (function($){
 		var focusXAxis = d3.svg.axis().scale(focusScale).orient("top"),
 			contextXAxis = d3.svg.axis().scale(contextScale).orient("top");
 
+		var formatMillisecond = d3.time.format(".%L"),
+		    formatSecond = d3.time.format(":%S"),
+		    formatMinute = d3.time.format("%I:%M"),
+		    formatHour = d3.time.format("%I %p"),
+		    formatDay = d3.time.format("%a %d"),
+		    formatWeek = d3.time.format("%b %d"),
+		    formatMonth = d3.time.format("%b"),
+		    formatYear = d3.time.format("%Y");
+
+		function multiFormat(date) {
+		  return (d3.time.second(date) < date ? formatMillisecond
+		      : d3.time.minute(date) < date ? formatSecond
+		      : d3.time.hour(date) < date ? formatMinute
+		      : d3.time.day(date) < date ? formatHour
+		      : d3.time.month(date) < date ? (d3.time.week(date) < date ? formatDay : formatWeek)
+		      : d3.time.year(date) < date ? formatMonth
+		      : formatYear)(date);
+		}
+
+		focusXAxis.tickFormat(multiFormat);
+		contextXAxis.tickFormat(multiFormat);
+
 		// Nest, Area and Stack
 		var stack = d3.layout.stack()
 			.offset("silhouette")
