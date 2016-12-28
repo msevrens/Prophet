@@ -279,7 +279,26 @@ buildMoodTracker = (function($){
 			.attr("cy", function(d) { return mY(d.value); });
 		
 		// Draw Axes
-		var XAxis = d3.svg.axis().scale(x).orient("bottom");
+		var formatMillisecond = d3.time.format(".%L"),
+		    formatSecond = d3.time.format(":%S"),
+		    formatMinute = d3.time.format("%I:%M"),
+		    formatHour = d3.time.format("%I %p"),
+		    formatDay = d3.time.format("%a %d"),
+		    formatWeek = d3.time.format("%b %d"),
+		    formatMonth = d3.time.format("%b"),
+		    formatYear = d3.time.format("%Y");
+
+		function multiFormat(date) {
+		  return (d3.time.second(date) < date ? formatMillisecond
+		      : d3.time.minute(date) < date ? formatSecond
+		      : d3.time.hour(date) < date ? formatMinute
+		      : d3.time.day(date) < date ? formatHour
+		      : d3.time.month(date) < date ? (d3.time.week(date) < date ? formatDay : formatWeek)
+		      : d3.time.year(date) < date ? formatMonth
+		      : formatYear)(date);
+		}
+
+		var XAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(multiFormat);
 
 		var field = svg.append("g").attr("height", height);
 		

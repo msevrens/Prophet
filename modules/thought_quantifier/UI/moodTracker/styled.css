@@ -21,6 +21,10 @@ p {
   shape-rendering: crispEdges;
 }
 
+.axis {
+  font-family: 'Quicksand', sans-serif;
+}
+
 .line {
   fill: none;
   stroke: steelblue;
