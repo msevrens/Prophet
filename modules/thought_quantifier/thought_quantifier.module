@@ -10,9 +10,9 @@ function thought_quantifier_cron() {
 
   // Load thoughts and process through Prophet Mind
   if (date('ymd', $cron_last) != date('ymd', time())) {
-    $result = fetch_yesterdays_thoughts();
+    $result = fetch_recent_thoughts();
     wordstream_process($result);
-    $result = fetch_yesterays_thoughts();
+    $result = fetch_recent_thoughts();
     parse_trackables($result);
     variable_set('cron_last', date('ymd', time()));
   }
@@ -352,17 +352,11 @@ function thought_quantifier_form_submit($form, &$form_state) {
   $triggering_element = $form_state['triggering_element']['#value'];
 
   switch ($triggering_element) {
-    case "Process Today's Thoughts":
-      $result = fetch_todays_thoughts();
+    case "Process Recent Thoughts":
+      $result = fetch_recent_thoughts();
       wordstream_process($result);
-      $results = fetch_todays_thoughts();
+      $results = fetch_recent_thoughts();
       parse_trackables($results);
-      break;
-    case 'Purge Stream':
-      $result = db_truncate('word_counts')->execute();
-      $result = db_truncate('trackables')->execute();
-      dpm("Purge Stream");
-      //Truncate table word_counts;
       break;
     case 'Reprocess Stream':
       $drop = db_truncate('word_counts')->execute();
@@ -371,7 +365,6 @@ function thought_quantifier_form_submit($form, &$form_state) {
       wordstream_process($result);
       $result = fetch_all_thoughts();
       parse_trackables($result);
-      dpm("Reprocess Stream");
       break;
     default:
       break;
@@ -388,13 +381,7 @@ function thought_quantifier_form($form, &$form_state) {
   # Submit Button
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => t("Process Today's Thoughts"),
-    '#submit' => array('thought_quantifier_form_submit'),
-  );
-
-  $form['purge'] = array(
-    '#type' => 'submit',
-    '#value' => t('Purge Stream'),
+    '#value' => t("Process Recent Thoughts"),
     '#submit' => array('thought_quantifier_form_submit'),
   );
 
@@ -406,22 +393,6 @@ function thought_quantifier_form($form, &$form_state) {
   
   return $form;
   
-}
-
-/**
- * Get Yesterdays Thoughts
- */
-
-function fetch_yesterdays_thoughts() {
-
-  # Get Thoughts from Database
-  $query = db_select('node', 'n');
-  $query->condition('n.type', 'thought', '=')->fields('n', array('title', 'uid', 'created'));
-  $query->condition('created', array(strtotime("yesterday 0:00"), strtotime("today 0:00")), 'BETWEEN');
-  $result = $query->execute();
-
-  return $result;
-
 }
 
 /**
@@ -440,15 +411,15 @@ function fetch_all_thoughts() {
 }
 
 /**
- * Get Todays Thoughts
+ * Get Thoughts from Today and Yesterday
  */
 
-function fetch_todays_thoughts() {
+function fetch_recent_thoughts() {
 
   # Get Thoughts from Database
   $query = db_select('node', 'n');
   $query->condition('n.type', 'thought', '=')->fields('n', array('title', 'uid', 'created'));
-  $query->condition('created', array(strtotime("today 0:00"), strtotime("tomorrow 0:00")), 'BETWEEN');
+  $query->condition('created', array(strtotime("yesterday 0:00"), strtotime("tomorrow 0:00")), 'BETWEEN');
   $result = $query->execute();
 
   return $result;
@@ -568,6 +539,8 @@ function wordstream_process($result) {
     store_wordcounts($response, $uid);
 
   }
+
+  dpm("Stream Updated");
 
 }
 
