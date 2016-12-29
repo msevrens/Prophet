@@ -188,9 +188,6 @@ function load_mood_markup() {
     }
   }
 
-  # Get Max Date
-  $max_min_dates = db_query('select max(date), min(date) from ubs_trackables where uid = ' . $user->uid)->fetchAssoc();
-
   # Fetch Trackable Values
   $query = db_select('trackables', 'w');
   $query->condition('w.uid', $user->uid, '=')->fields('w', array('date', 'tag', 'value'));
@@ -215,43 +212,31 @@ function load_mood_markup() {
     return "<div class='no-thoughts'>Insufficient mood data available. Track mood via <strong>#mood: [0-10]</strong>. This visualization updates at midnight</div>";
   }
 
-  # Group by Week or by Day
-  $date_range = strtotime($max_min_dates['max(date)']) - strtotime($max_min_dates['min(date)']);
-  $days_in_data = floor($date_range/(60*60*24));
+  # Group By Day or Week
+  $grouped = [];
 
-  # Get Date Details
-  $first_monday = strtotime('monday this week', strtotime($max_min_dates['min(date)']));
-  $last_monday = strtotime('monday this week', strtotime($max_min_dates['max(date)']));
-
-  # TODO: Group By Week
-  if ($days_in_data < 60) {
-    $json_data = json_encode(array_values($formatted_data));
-  } else {
-    $grouped = [];
-
-    foreach ($formatted_data as $row) {
-      $date = strtotime($row->date);
-      $week = strtotime('monday this week', $date);
-      $week = ($groupby == "week" ? $week : $date);
-      if (array_key_exists(date('Y-m-d', $week), $grouped)) {
-        array_push($grouped[date('Y-m-d', $week)], floatval($row->value));
-      } else {
-        $grouped[date('Y-m-d', $week)] = [];
-        array_push($grouped[date('Y-m-d', $week)], floatval($row->value));
-      }
+  foreach ($formatted_data as $row) {
+    $date = strtotime($row->date);
+    $week = strtotime('monday this week', $date);
+    $week = ($groupby == "week" ? $week : $date);
+    if (array_key_exists(date('Y-m-d', $week), $grouped)) {
+      array_push($grouped[date('Y-m-d', $week)], floatval($row->value));
+    } else {
+      $grouped[date('Y-m-d', $week)] = [];
+      array_push($grouped[date('Y-m-d', $week)], floatval($row->value));
     }
-
-    $weekly = [];
-    foreach ($grouped as $key => $value) {
-      $average = array_sum($value) / count($value);
-      $sum = array_sum($value);
-      $value = ($method == "sum" ? $sum : $average);
-      array_push($weekly, ['tag' =>  '#mood', 'value' => $value, 'date' => $key]);
-    }
-
-    $json_data = json_encode($weekly);
-    //$json_data = json_encode(array_values($formatted_data));
   }
+
+  $weekly = [];
+
+  foreach ($grouped as $key => $value) {
+    $average = array_sum($value) / count($value);
+    $sum = array_sum($value);
+    $value = ($method == "sum" ? $sum : $average);
+    array_push($weekly, ['tag' =>  '#mood', 'value' => $value, 'date' => $key]);
+  }
+
+  $json_data = json_encode($weekly);
 
   $html = '<div class="mood-chart"></div>' . '<script>var moodData=' . $json_data . '; var trackables=' . json_encode($top_tags) . '</script>'; 
 
