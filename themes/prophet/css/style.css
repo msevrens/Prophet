@@ -12,6 +12,10 @@
 
 /* New Front Page Design */
 
+.views-field-comment-count {
+    float: left;
+}
+
 .no-thoughts {
 	font-family: Quicksand;
     width: 400px;
