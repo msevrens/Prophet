@@ -12,7 +12,7 @@
 
 /* New Front Page Design */
 
-.views-field-comment-count {
+.thought-content .views-field.views-field-comment-count {
     float: left;
 }
 
