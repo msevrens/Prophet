@@ -227,16 +227,22 @@ function load_mood_markup() {
     }
   }
 
-  $weekly = [];
+  $collected = [];
 
   foreach ($grouped as $key => $value) {
     $average = array_sum($value) / count($value);
     $sum = array_sum($value);
     $value = ($method == "sum" ? $sum : $average);
-    array_push($weekly, ['tag' =>  '#mood', 'value' => $value, 'date' => $key]);
+    array_push($collected, ['tag' =>  '#mood', 'value' => $value, 'date' => $key]);
   }
 
-  $json_data = json_encode($weekly);
+  # Get Temporal Focus
+  $tf_query = 'select a.field_type_value, a.entity_id, b.created, b.nid, b.uid ';
+  $tf_from = 'from ubs_field_data_field_type a, ubs_node b ';
+  $tf_where = 'where a.entity_id = b.nid and b.uid = ' . $user->uid;
+  # $tf_result = db_query($tf_query . $tf_from . $tf_where);
+
+  $json_data = json_encode($collected);
 
   $html = '<div class="mood-chart"></div>' . '<script>var moodData=' . $json_data . '; var trackables=' . json_encode($top_tags) . '</script>'; 
 
