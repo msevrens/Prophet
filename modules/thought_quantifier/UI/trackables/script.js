@@ -1,4 +1,4 @@
-buildMoodTracker = (function($){
+buildTrackablesVisualization = (function($){
 
 	var globalData = {};
 
@@ -83,22 +83,22 @@ buildMoodTracker = (function($){
 
 	function formatData(data) {
 
-		var mood = [],
+		var trackable = [],
 			format = d3.time.format("%Y-%m-%d");
 
 		data.forEach(function(day) {
-			if (parseFloat(day["mood"], 10) != 0) {
+			if (parseFloat(day["trackable"], 10) != 0) {
 				m_row = {
 					"value" : parseFloat(day["value"], 10), 
-					"key" : "mood", 
+					"key" : "trackable", 
 					"date" : format.parse(day["date"])
 				}
-				mood.push(m_row)
+				trackable.push(m_row)
 			}
 				 
 		})
 
-		return mood
+		return trackable
 
 	}
 
@@ -149,25 +149,30 @@ buildMoodTracker = (function($){
 			legendWidth = 100,
 			axisHeight = 20;
 
-		var svg = d3.select(".mood-chart").append("svg")
+		var svg = d3.select(".trackables-chart").append("svg")
 			.attr("class", "main-svg")
 			.attr("width", width - legendWidth)
 			.attr("height", height + axisHeight);
 
-		var legend = d3.select(".mood-chart").append("svg")
+		var legend = d3.select(".trackables-chart").append("svg")
 			.attr("class", "legend")
 			.attr("height", height)
 			.attr("width", faceSize);
 
+		// Tooltip
+		var tooltip = legend.append("text")
+			.attr("x", 10)
+			.attr("y", 10)
+
 		// Set Up Controls
 
-		var tagDefault = getURLParameter("tag") ? getURLParameter("tag") : "mood",
+		var tagDefault = getURLParameter("tag") ? getURLParameter("tag") : "trackable",
 			groupbyDefault = getURLParameter("groupby") ? getURLParameter("groupby") : "week",
 			groupbyDefault = groupbyDefault == "week" ? true : false,
 			methodDefault = getURLParameter("method") ? getURLParameter("method") : "average",
 			methodDefault = methodDefault == "sum" ? true : false;
 
-		var tagList = d3.select(".mood-chart").append("select")
+		var tagList = d3.select(".trackables-chart").append("select")
 			.attr("class", "form-control form-control-sm tag-list")
 			.on("change", updateChart)
 			.style("float", "left")
@@ -183,7 +188,7 @@ buildMoodTracker = (function($){
 			})
 			.text(function(d){return d});
 
-		var methodSelect = d3.select(".mood-chart").append("input")
+		var methodSelect = d3.select(".trackables-chart").append("input")
 			.attr("class", "method-toggle")
 			.style("margin", "15px")
 			.attr("type", "checkbox")
@@ -192,7 +197,7 @@ buildMoodTracker = (function($){
 			.attr("data-on", "Sum")
 			.attr("data-off", "Average")
 
-		var groupbyToggle = d3.select(".mood-chart").append("input")
+		var groupbyToggle = d3.select(".trackables-chart").append("input")
 			.attr("class", "groupby-toggle")
 			.style("margin", "15px")
 			.attr("type", "checkbox")
@@ -202,7 +207,7 @@ buildMoodTracker = (function($){
 			.attr("data-off", "Daily")
 
 		/*
-		var maxMinToggle = d3.select(".mood-chart").append("input")
+		var maxMinToggle = d3.select(".trackables-chart").append("input")
 			.attr("class", "max-min-toggle")
 			.style("margin", "15px")
 			.attr("type", "checkbox")
@@ -248,17 +253,17 @@ buildMoodTracker = (function($){
 		var stateMap = stateLookup(states);
 
 		// Data
-		var mood = formatData(data);
+		var trackable = formatData(data);
 
 		// Gradients
-		var moodRange = d3.extent(mood, function(d) { return d["value"] }),
+		var trackableRange = d3.extent(trackable, function(d) { return d["value"] }),
 			format = d3.time.format("%Y-%m-%d"),
 			timeRange = d3.extent(data, function(d) { return format.parse(d["date"])}),
 			colorScale = d3.scale.linear().domain([-1, 0, 1]).range(['#694a69', 'steelblue', 'yellow']);
 
 		var x = d3.time.scale().domain(timeRange).range([0, width - legendWidth]),
 			y = d3.scale.linear().domain([-1, 1]).range([height, 0])
-			mY = d3.scale.linear().domain(moodRange).range([height, 0]);
+			mY = d3.scale.linear().domain(trackableRange).range([height, 0]);
 
 		// Line 
 		var line = d3.svg.line()
@@ -272,7 +277,7 @@ buildMoodTracker = (function($){
 		var dotSize = (width > 800) ? 2 : 1; 
 
 		svg.selectAll("dot")
-			.data(mood)
+			.data(trackable)
 			.enter().append("circle")
 			.attr("r", dotSize)
 			.attr("cx", function(d) { return x(d.date); })
@@ -308,13 +313,13 @@ buildMoodTracker = (function($){
 			.call(XAxis);
 
 		field.append("path")
-			.datum(mood)
+			.datum(trackable)
 			.attr("class", "fat-line")
 			.attr("stroke-width", fatLineWidth + "px")
 			.attr("d", line);
 
 		var path = field.append("path")
-			.datum(mood)
+			.datum(trackable)
 			.attr("class", "line")
 			.attr("d", line);
 
@@ -329,12 +334,13 @@ buildMoodTracker = (function($){
           .attr("r", 3)
           .attr("fill", "steelblue");
 
-        var funcScale = d3.scale.linear().domain([-1, 1]).range([0, 6]);
+        var funcScale = d3.scale.linear().domain([-1, 1]).range([0, 6]),
+        	timeFormat = d3.time.format("%m/%d/%Y");
 
 		// Interactive Face
 		svg.on("mousemove", function() {
 			var mouse = d3.mouse(this),
-				x = mouse[0],
+				xPos = mouse[0],
 				beginning = mouse[0], 
 				end = pathLength;
 				
@@ -344,11 +350,11 @@ buildMoodTracker = (function($){
 			while (true) {
 				target = Math.floor((beginning + end) / 2);
 				pos = pathEl.getPointAtLength(target);
-				if ((target === end || target === beginning) && pos.x !== x) {
+				if ((target === end || target === beginning) && pos.x !== xPos) {
 					break;
 				}
-				if (pos.x > x) end = target;
-				else if (pos.x < x) beginning = target;
+				if (pos.x > xPos) end = target;
+				else if (pos.x < xPos) beginning = target;
 				else				break; //position found
 			}
 
@@ -358,12 +364,18 @@ buildMoodTracker = (function($){
 				.attr("cy", pos.y);
 
 			var scaledY = y.invert(pos.y),
+				date = x.invert(pos.x),
 				color = colorScale(scaledY),
 				scaledIndex = funcScale(scaledY),
 				funcToUse = Math.floor(scaledIndex),
 				t = scaledIndex % 1,
 				newMouthLine = stateMap[funcToUse](t);
 
+			tooltip.text(timeFormat(date))
+				.style("font-size", "11px")
+				.style("font-family", "Quicksand")
+				.style("fill", "grey");
+			
 			d3.select(".mouth")
 				.attr("d", newMouthLine)
 

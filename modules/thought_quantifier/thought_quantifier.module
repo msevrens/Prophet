@@ -39,12 +39,11 @@ function thought_quantifier_block_info() {
     'pages' => 'wordstream'
   );
 
-  $blocks['mood_tracker_block'] = array(
-    'info' => t('Mood Tracker'),
+  $blocks['trackables_block'] = array(
+    'info' => t('Trackables'),
     'cache' => DRUPAL_CACHE_GLOBAL,
-    'region' => 'Content',
     'visibility' => 1,
-    'pages' => 'moodtracker'
+    'pages' => 'trackables'
   );
 
   return $blocks;
@@ -61,20 +60,20 @@ function thought_quantifier_menu() {
     'page callback' => 'theme_wordstream_page',
     'access arguments' => array('access content'),
   );
-  $items['moodtracker'] = array(
+  $items['trackables'] = array(
     'type' => MENU_CALLBACK,
-    'page callback' => 'theme_moodtracker_page',
+    'page callback' => 'theme_trackables_page',
     'access arguments' => array('access content'),
   );
   return $items;
 }
 
 /**
- * Returns Markup for Mood Tracker
+ * Returns Markup for Trackables Page
  */
 
-function theme_moodtracker_page() {
-  return theme('thought_quantifier_moodtracker');
+function theme_trackables_page() {
+  return theme('thought_quantifier_trackables');
 }
 
 /**
@@ -94,8 +93,8 @@ function thought_quantifier_theme($existing, $type, $theme, $path) {
     'thought_quantifier_wordstream' => array(
       'template' => 'thought_quantifier_wordstream'
     ),
-    'thought_quantifier_moodtracker' => array(
-      'template' => 'thought_quantifier_moodtracker'
+    'thought_quantifier_trackables' => array(
+      'template' => 'thought_quantifier_trackables'
     ),
   );
 }
@@ -108,8 +107,8 @@ function thought_quantifier_preprocess_page(&$variables, $hook) {
   if($_GET['q'] == 'wordstream') {
     $variables['theme_hook_suggestions'][] = 'thought_quantifier_wordstream';
   }
-  if($_GET['q'] == 'moodtracker') {
-    $variables['theme_hook_suggestions'][] = 'thought_quantifier_moodtracker';
+  if($_GET['q'] == 'trackables') {
+    $variables['theme_hook_suggestions'][] = 'thought_quantifier_trackables';
   }
 }
 
@@ -144,7 +143,7 @@ function thought_quantifier_block_view($delta = '') {
         ]
       ];
       break;
-    case 'mood_tracker_block':
+    case 'trackables_block':
       $block['subject'] = '';
       $block['content'] = [
         '#markup' => load_trackables_markup(),
@@ -152,10 +151,10 @@ function thought_quantifier_block_view($delta = '') {
           'js' => [
             'http://d3js.org/d3.v2.js',
             $m_path . '/UI/wordStream/bootstrap-multiselect.js',
-            $m_path . '/UI/moodTracker/script.js'
+            $m_path . '/UI/trackables/script.js'
           ],
           'css' => [
-            $m_path . '/UI/moodTracker/styled.css',
+            $m_path . '/UI/trackables/styled.css',
             $m_path . '/UI/wordStream/bootstrap-multiselect.css'
           ]
         ]
@@ -165,18 +164,6 @@ function thought_quantifier_block_view($delta = '') {
 
   return $block;
 
-}
-
-/**
-* Load thought type counts and calculate temporal focus
-*/
-
-function get_temporal_focus($user) {
-
-      $tf_query = 'select a.field_type_value, a.entity_id, b.created, b.nid, b.uid ';
-      $tf_from = 'from ubs_field_data_field_type a, ubs_node b ';
-      $tf_where = 'where a.entity_id = b.nid and b.uid = ' . $user->uid;
-      # $tf_result = db_query($tf_query . $tf_from . $tf_where);
 }
 
 /**
@@ -206,7 +193,28 @@ function load_trackables_data($tag, $user) {
 }
 
 /**
-* Load Mood Stream Data and Produce Markup
+* Load thought type counts and calculate temporal focus
+*/
+
+function get_temporal_focus($user) {
+
+      $tf_query = 'select a.field_type_value, a.entity_id, b.created, b.nid, b.uid ';
+      $tf_from = 'from ubs_field_data_field_type a, ubs_node b ';
+      $tf_where = 'where a.entity_id = b.nid and b.uid = ' . $user->uid;
+      $tf_result = db_query($tf_query . $tf_from . $tf_where);
+
+      $result_array = [];
+
+      foreach ($tf_result as $record) {
+        array_push($result_array, $record);
+      }
+
+      return $result_array;
+
+}
+
+/**
+* Load Trackables Data and Produce Markup
 */
 
 function load_trackables_markup() {
@@ -232,7 +240,7 @@ function load_trackables_markup() {
 
   # Load Data
   if ($tag == "#temporalFocus") {
-    get_temporal_focus($user);
+    $formatted_data = get_temporal_focus($user);
     return "<div class='no-thoughts'>Temporal Focus visualization coming soon</div>";
   } elseif ($tag == "#privacy") {
     return "<div class='no-thoughts'>Privacy visualization coming soon</div>";
@@ -267,12 +275,12 @@ function load_trackables_markup() {
     $average = array_sum($value) / count($value);
     $sum = array_sum($value);
     $value = ($method == "sum" ? $sum : $average);
-    array_push($collected, ['tag' =>  '#mood', 'value' => $value, 'date' => $key]);
+    array_push($collected, ['tag' =>  '#trackable', 'value' => $value, 'date' => $key]);
   }
 
   $json_data = json_encode($collected);
 
-  $html = '<div class="mood-chart"></div>' . '<script>var moodData=' . $json_data . '; var trackables=' . json_encode($top_tags) . '</script>'; 
+  $html = '<div class="trackables-chart"></div>' . '<script>var trackablesData=' . $json_data . '; var trackables=' . json_encode($top_tags) . '</script>'; 
 
   return $html;
 

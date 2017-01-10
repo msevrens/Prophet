@@ -117,10 +117,10 @@
 
 <div>
   <?php if ($logged_in): ?>
-    <?php print render($page['content']['thought_quantifier_mood_tracker_block']); ?>
+    <?php print render($page['content']['thought_quantifier_trackables_block']); ?>
     <script>
-      if (typeof moodData !== 'undefined') {
-        buildMoodTracker(moodData);
+      if (typeof trackablesData !== 'undefined') {
+        buildTrackablesVisualization(trackablesData);
       }
     </script>
   <?php endif; ?>
