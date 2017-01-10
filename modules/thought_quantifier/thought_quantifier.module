@@ -204,10 +204,38 @@ function get_temporal_focus($user) {
       $tf_result = db_query($tf_query . $tf_from . $tf_where);
 
       $result_array = [];
+      $counted = [];
 
-      foreach ($tf_result as $record) {
-        array_push($result_array, $record);
+      foreach ($tf_result as $row) {
+        $date = date('Y-m-d', $row->created);
+        if (array_key_exists($date, $counted)) {
+          $counted[$date][$row->field_type_value] += 1;
+        } else {
+          $counted[$date] = [
+            'Predict' => 0,
+            'Reflect' => 0,
+            'Ask' => 0,
+            'State' => 0,
+          ];
+        }
       }
+
+      foreach ($counted as $date => $counts) {
+        $total_thoughts = array_sum($counts);
+        $percent_predictions = $counts['Predict'] / $total_thoughts;
+        $percent_reflections = $counts['Reflect'] / $total_thoughts;
+        $temporal_focus = $percent_predictions - $percent_reflections;
+        $row = new StdClass;
+        $row->tag = '#temporalFocus';
+        $row->value = $temporal_focus;
+        $row->date = $date;
+        array_push($result_array, $row);
+      }
+
+      # Output Format
+      #  ([date] => 2015-05-12 20:23:51 [tag] => #temporalFocus [value] => 0.1 )
+
+      # TODO: Count type by day
 
       return $result_array;
 
@@ -241,7 +269,7 @@ function load_trackables_markup() {
   # Load Data
   if ($tag == "#temporalFocus") {
     $formatted_data = get_temporal_focus($user);
-    return "<div class='no-thoughts'>Temporal Focus visualization coming soon</div>";
+    #return "<div class='no-thoughts'>Temporal Focus visualization coming soon</div>";
   } elseif ($tag == "#privacy") {
     return "<div class='no-thoughts'>Privacy visualization coming soon</div>";
   } elseif ($tag == "#curiosity") {

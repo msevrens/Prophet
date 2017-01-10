@@ -261,6 +261,9 @@ buildTrackablesVisualization = (function($){
 			timeRange = d3.extent(data, function(d) { return format.parse(d["date"])}),
 			colorScale = d3.scale.linear().domain([-1, 0, 1]).range(['#694a69', 'steelblue', 'yellow']);
 
+		var tag = $("select.tag-list").val(),
+			trackableRange = tag == "#temporalFocus" ? [-1, 1] : trackableRange;
+
 		var x = d3.time.scale().domain(timeRange).range([0, width - legendWidth]),
 			y = d3.scale.linear().domain([-1, 1]).range([height, 0])
 			mY = d3.scale.linear().domain(trackableRange).range([height, 0]);
