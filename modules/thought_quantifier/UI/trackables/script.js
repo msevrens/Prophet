@@ -258,11 +258,16 @@ buildTrackablesVisualization = (function($){
 		// Gradients
 		var trackableRange = d3.extent(trackable, function(d) { return d["value"] }),
 			format = d3.time.format("%Y-%m-%d"),
-			timeRange = d3.extent(data, function(d) { return format.parse(d["date"])}),
-			colorScale = d3.scale.linear().domain([-1, 0, 1]).range(['#694a69', 'steelblue', 'yellow']);
+			timeRange = d3.extent(data, function(d) { return format.parse(d["date"])});
 
 		var tag = $("select.tag-list").val(),
 			trackableRange = tag == "#temporalFocus" ? [-1, 1] : trackableRange;
+
+		var moodColors = ['#694a69', 'steelblue', 'yellow'],
+			tfColors = ["#8E2B2B", "#3276B1", "#50457B"],
+			colorGradient = tag == "#temporalFocus" ? tfColors : moodColors;
+
+		var colorScale = d3.scale.linear().domain([-1, 0, 1]).range(colorGradient);
 
 		var x = d3.time.scale().domain(timeRange).range([0, width - legendWidth]),
 			y = d3.scale.linear().domain([-1, 1]).range([height, 0])
@@ -382,7 +387,10 @@ buildTrackablesVisualization = (function($){
 			d3.select(".mouth")
 				.attr("d", newMouthLine)
 
+			var faceOpacity = tag == "#temporalFocus" ? 0.9 : 0.5;
+
 			d3.select(".legend .face")
+				.style("opacity", faceOpacity)
 				.attr("fill", color);
 
   		});
@@ -404,9 +412,9 @@ buildTrackablesVisualization = (function($){
 			.attr("x2", 0).attr("y2", y(1))
 			.selectAll("stop")
 			.data([
-				{offset: "0%", color: "#694a69"}, // black, red, purple
-				{offset: "50%", color: "steelblue"},
-				{offset: "100%", color: "yellow"}
+				{offset: "0%", color: colorGradient[0]}, // black, red, purple
+				{offset: "50%", color: colorGradient[1]},
+				{offset: "100%", color: colorGradient[2]}
 			])
 			.enter().append("stop")
 			.attr("offset", function(d) { return d.offset; })

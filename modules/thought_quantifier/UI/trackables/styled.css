@@ -31,10 +31,6 @@ p {
   stroke-width: 1px;
 }
 
-.legend .face{
-  opacity: 0.5;
-}
-
 .legend .eye {
   opacity: 0.6;
 }
