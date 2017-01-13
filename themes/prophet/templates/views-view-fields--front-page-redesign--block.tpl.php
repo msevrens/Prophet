@@ -47,12 +47,24 @@ if ($row->field_field_private) {
 
   	<?php
 
-  		if ($field->label == 'Truth' and $color_class == 'ask') {
-
-  		} else {
-  		  print $field->label_html;
-        print $field->content;	
-  		}
+      if ($id == 'title') {
+        if ($color_class == 'ask') {
+          print $field->label_html;
+          print $field->content;
+        } else {
+          print $field->label_html;
+          print $field->content;
+          #print $row->node_title;
+        }
+      } elseif ($field->label == 'Truth') {
+        if ($color_class != 'ask') {
+          print $field->label_html;
+          print $field->content;  
+        }
+      } else {
+        print $field->label_html;
+        print $field->content;
+      }
 
   	?>
 
