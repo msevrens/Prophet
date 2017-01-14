@@ -221,10 +221,12 @@ function get_temporal_focus($user) {
       }
 
       foreach ($counted as $date => $counts) {
-        $total_thoughts = array_sum($counts);
+        $total_thoughts = $counts['Predict'] + $counts['Reflect'] + $counts['State'];
         $percent_predictions = $counts['Predict'] / $total_thoughts;
         $percent_reflections = $counts['Reflect'] / $total_thoughts;
+        $percent_statements = $counts['State'] / $total_thoughts;
         $temporal_focus = $percent_predictions - $percent_reflections;
+        $temporal_focus = $temporal_focus / (1 - $percent_statements);
         $row = new StdClass;
         $row->tag = '#temporalFocus';
         $row->value = $temporal_focus;
@@ -557,8 +559,10 @@ function fetch_recent_thoughts() {
 
 function parse_trackables($result) {
 
-  $hashtag_pattern = "/\#[a-zA-Z]+:? \d+\.?\d?/";
+  $hashtag_pattern = "/\#[a-zA-Z]+:? \d+\.?\d{0,3}/";
   $pat_pattern = "/HL \d/";
+  $ce_pattern = "/CE \d/";
+  $hc_pattern = "/HC \d/";
   $values = [];
 
   foreach ($result as $record) {
@@ -584,6 +588,22 @@ function parse_trackables($result) {
       foreach ($matches_out[0] as $match) {
         $parts = preg_split('/\s+/', $match);
         $tag = "#mood";
+        array_push($values[$date], ["tag" => strtolower($tag), "value" => $parts[1], "uid" => $record->uid]);
+      }
+    }
+
+    if (preg_match_all($ce_pattern, $record->title, $matches_out)) {
+      foreach ($matches_out[0] as $match) {
+        $parts = preg_split('/\s+/', $match);
+        $tag = "#creativeEngagement";
+        array_push($values[$date], ["tag" => strtolower($tag), "value" => $parts[1], "uid" => $record->uid]);
+      }
+    }
+
+    if (preg_match_all($hc_pattern, $record->title, $matches_out)) {
+      foreach ($matches_out[0] as $match) {
+        $parts = preg_split('/\s+/', $match);
+        $tag = "#humanContact";
         array_push($values[$date], ["tag" => strtolower($tag), "value" => $parts[1], "uid" => $record->uid]);
       }
     }
