@@ -23,3 +23,10 @@ function prophet_form_views_exposed_form_alter(&$form, &$form_state) {
     $form_state['input']['thought_type'] = 'All';
   }
 }
+
+function prophet_preprocess_page(&$variables) {
+    if (isset($variables['node']->type)) {
+        $nodetype = $variables['node']->type;
+        $variables['theme_hook_suggestions'][] = 'page__' . $nodetype;
+    }
+}
