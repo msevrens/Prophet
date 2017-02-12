@@ -326,18 +326,25 @@ function load_trackables_markup() {
   $where_condition = 'where uid = ' . $user->uid;
   $groupby = ' group by tag order by count(tag)';
   $result = db_query($main_query . $where_condition . $groupby);
-  $top_tags = ["#temporalFocus", "#privacy", "#curiosity"];
+  $top_tags = [];
+  $top_tag = '';
+  $top_tag_count = 0;
 
   foreach ($result as $record) {
     $record_arr = get_object_vars($record);
     if ($record_arr['count(tag)'] > 5) {
       array_push($top_tags, $record_arr['tag']);
     }
+    if ($record_arr['count(tag)'] > $top_tag_count) {
+      $top_tag = $record_arr['tag'];
+      $top_tag_count = $record_arr['count(tag)'];
+    }
   }
 
-  $tag = ($_GET["tag"] ? "#" . $_GET["tag"] : "#mood");
-  $method = ($_GET["method"] ? $_GET["method"] : "average");
-  $groupby = ($_GET["groupby"] ? $_GET["groupby"] : "week");
+  $top_tags = array_merge(["#temporalFocus", "#privacy", "#curiosity"], $top_tags);
+  $tag = ($_GET["tag"] ? "#" . $_GET["tag"] : $top_tag);
+  $method = ($_GET["method"] ? $_GET["method"] : "sum");
+  $groupby = ($_GET["groupby"] ? $_GET["groupby"] : "day");
 
   # Load Data
   if ($tag == "#temporalFocus") {
