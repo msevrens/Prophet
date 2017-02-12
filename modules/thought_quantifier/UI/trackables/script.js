@@ -157,7 +157,7 @@ buildTrackablesVisualization = (function($){
 		var legend = d3.select(".trackables-chart").append("svg")
 			.attr("class", "legend")
 			.attr("height", height)
-			.attr("width", faceSize);
+			.attr("width", faceSize + 20);
 
 		// Tooltip
 		var tooltip = legend.append("text")
@@ -167,9 +167,9 @@ buildTrackablesVisualization = (function($){
 		// Set Up Controls
 
 		var tagDefault = getURLParameter("tag") ? getURLParameter("tag") : "trackable",
-			groupbyDefault = getURLParameter("groupby") ? getURLParameter("groupby") : "week",
+			groupbyDefault = getURLParameter("groupby") ? getURLParameter("groupby") : "day",
 			groupbyDefault = groupbyDefault == "week" ? true : false,
-			methodDefault = getURLParameter("method") ? getURLParameter("method") : "average",
+			methodDefault = getURLParameter("method") ? getURLParameter("method") : "sum",
 			methodDefault = methodDefault == "sum" ? true : false;
 
 		var tagList = d3.select(".trackables-chart").append("select")
@@ -273,9 +273,11 @@ buildTrackablesVisualization = (function($){
 			y = d3.scale.linear().domain([-1, 1]).range([height, 0])
 			mY = d3.scale.linear().domain(trackableRange).range([height, 0]);
 
+		var maSpread = globalData.length < 10 ? 2 : 5
+
 		// Line 
 		var line = d3.svg.line()
-			.interpolate(movingAvg(5))
+			.interpolate(movingAvg(maSpread))
 			.x(function(d) { return x(d.date); })
 			.y(function(d) { return mY(d.value); });
 
