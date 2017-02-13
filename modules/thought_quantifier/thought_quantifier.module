@@ -341,10 +341,10 @@ function load_trackables_markup() {
     }
   }
 
-  $top_tags = array_merge(["#temporalFocus", "#privacy", "#curiosity"], $top_tags);
-  $tag = ($_GET["tag"] ? "#" . $_GET["tag"] : $top_tag);
-  $method = ($_GET["method"] ? $_GET["method"] : "sum");
-  $groupby = ($_GET["groupby"] ? $_GET["groupby"] : "day");
+  $top_tags = array_merge($top_tags, ["#curiosity", "#privacy", "#temporalFocus"]);
+  $tag = ($_GET["tag"] ? "#" . $_GET["tag"] : "#temporalFocus");
+  $method = ($_GET["method"] ? $_GET["method"] : "average");
+  $groupby = ($_GET["groupby"] ? $_GET["groupby"] : "week");
 
   # Load Data
   if ($tag == "#temporalFocus") {

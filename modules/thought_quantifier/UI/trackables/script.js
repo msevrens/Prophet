@@ -166,10 +166,10 @@ buildTrackablesVisualization = (function($){
 
 		// Set Up Controls
 
-		var tagDefault = getURLParameter("tag") ? getURLParameter("tag") : "trackable",
-			groupbyDefault = getURLParameter("groupby") ? getURLParameter("groupby") : "day",
+		var tagDefault = getURLParameter("tag") ? getURLParameter("tag") : "temporalFocus",
+			groupbyDefault = getURLParameter("groupby") ? getURLParameter("groupby") : "week",
 			groupbyDefault = groupbyDefault == "week" ? true : false,
-			methodDefault = getURLParameter("method") ? getURLParameter("method") : "sum",
+			methodDefault = getURLParameter("method") ? getURLParameter("method") : "average",
 			methodDefault = methodDefault == "sum" ? true : false;
 
 		var tagList = d3.select(".trackables-chart").append("select")
@@ -260,7 +260,7 @@ buildTrackablesVisualization = (function($){
 			format = d3.time.format("%Y-%m-%d"),
 			timeRange = d3.extent(data, function(d) { return format.parse(d["date"])});
 
-		var tag = $("select.tag-list").val(),
+		var tag = "#" + tagDefault,
 			trackableRange = tag == "#temporalFocus" ? [-1, 1] : trackableRange;
 
 		var moodColors = ['#694a69', 'steelblue', 'yellow'],
