@@ -358,7 +358,7 @@ function load_trackables_markup() {
   }
 
   if (count($formatted_data) < 5) {
-    return "<div class='no-thoughts'>Insufficient data available. Continue posting to get access to auto-trackables. Manually track values via <strong>#tagName: (-∞, ∞)</strong>. This visualization updates at midnight</div>";
+    return "<div class='no-thoughts'>Insufficient data available. Continue posting to get access to auto-trackables. Manually track values via <strong>#tagName: (-∞, ∞)</strong></div>";
   }
 
   # Group By Day or Week
