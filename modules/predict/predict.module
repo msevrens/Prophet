@@ -163,8 +163,7 @@ function parse_trackable($node) {
   global $user;
 
   $thought = $node->title;
-  $hashtag_pattern = "/\#[a-zA-Z]+:? \d+\.?\d?/";
-  $pat_pattern = "/HL \d/";
+  $hashtag_pattern = "/\#[a-zA-Z]+:? \d+\.?\d{0,3}/";
   $date_key = date('Y-m-d H:i:s', $node->created);
   $values = [];
   $values[$date_key] = [];
@@ -180,21 +179,9 @@ function parse_trackable($node) {
     }
   } 
 
-  if (preg_match_all($pat_pattern, $thought, $matches_out)) {
-    foreach ($matches_out[0] as $match) {
-      $parts = preg_split('/\s+/', $match);
-      $tag = "#mood";
-      array_push($values[$date_key], ["tag" => strtolower($tag), "value" => $parts[1], "uid" => $user->uid]);
-    }
-  }
-
   # Save parsed values to database
-  # Dates don't align yet
-
   if (count($values[$date_key]) > 0) {
-    dpm($values);
-    //store_tags($values);
-    dpm("Trackable Parsed");
+    store_tags($values);
   }
 
 }
@@ -242,10 +229,10 @@ function thought_form_submit($form, &$form_state) {
 	node_save($node);
 
   if (strpos($form_state['values']['thought'], '#') !== false) { 
-    drupal_set_message("Trackable Logged: " + $form_state['values']['thought']);
+    drupal_set_message("Trackable Logged: " . $form_state['values']['thought']);
   }
 
-  #parse_trackable($node);
+  parse_trackable($node);
 	
 	# Callback to User
 	user_post_callback($triggering_element, $node);
