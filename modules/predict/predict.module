@@ -241,6 +241,10 @@ function thought_form_submit($form, &$form_state) {
 	node_object_prepare($node);
 	node_save($node);
 
+  if (strpos($form_state['values']['thought'], '#') !== false) { 
+    drupal_set_message("Trackable Logged: " + $form_state['values']['thought']);
+  }
+
   #parse_trackable($node);
 	
 	# Callback to User
