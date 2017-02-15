@@ -164,6 +164,10 @@ buildTrackablesVisualization = (function($){
 			.attr("x", 10)
 			.attr("y", 10)
 
+		var tooltipValue = legend.append("text")
+			.attr("x", 10)
+			.attr("y", 30)
+
 		// Set Up Controls
 
 		var tagDefault = getURLParameter("tag") ? getURLParameter("tag") : "temporalFocus",
@@ -380,6 +384,11 @@ buildTrackablesVisualization = (function($){
 				funcToUse = Math.floor(scaledIndex),
 				t = scaledIndex % 1,
 				newMouthLine = stateMap[funcToUse](t);
+
+			tooltipValue.text(Math.round(mY.invert(pos.y) * 100) / 100)
+				.style("font-size", "11px")
+				.style("font-family", "Quicksand")
+				.style("fill", "grey");
 
 			tooltip.text(timeFormat(date))
 				.style("font-size", "11px")
