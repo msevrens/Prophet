@@ -30,3 +30,8 @@ function prophet_preprocess_page(&$variables) {
         $variables['theme_hook_suggestions'][] = 'page__' . $nodetype;
     }
 }
+
+drupal_add_js(drupal_get_path('theme', 'prophet') . '/js/script.js', array(
+  'type' => 'file',
+  'group' => JS_THEME,
+));
