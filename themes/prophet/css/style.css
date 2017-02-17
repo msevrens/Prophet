@@ -5,6 +5,15 @@
 
 @import url(http://fonts.googleapis.com/css?family=Quicksand:400,700);
 
+.views-field-value span { 
+	color: #aaa;
+}
+
+.true-label {
+	display: inline-block;
+    float: right;
+}
+
 #edit-title-wrapper input {
 	color: white;
 }
