@@ -2,6 +2,13 @@ prophet = (function($){
 
 	$(function() {
 
+		run()
+		$(document).ajaxStop(run);   
+
+	});
+
+	function run() {
+
 		// Hack to hide trackable regex
 		$("#edit-title-wrapper input").val("")
 		$("#edit-title-wrapper input").css("color", "black");
@@ -35,6 +42,6 @@ prophet = (function($){
 
 		});
 
-	});
+	}
 
 })(jQuery);
