@@ -31,9 +31,13 @@ Drupal.behaviors.autocomplete = {
  * and closes the suggestions popup when doing so.
  */
 Drupal.autocompleteSubmit = function () {
-  return $('.form-autocomplete > .dropdown').each(function () {
+  $('.form-autocomplete > .dropdown').each(function () {
     this.owner.hidePopup();
-  }).length == 0;
+  });
+
+  // Always return true to make it possible to submit even when there was an
+  // autocomplete suggestion list open.
+    return true;
 };
 
 /**
@@ -94,10 +98,10 @@ Drupal.jsAC.prototype.found = function (matches) {
   });
   for (var key in matches) {
     $('<li></li>')
-      .html($('<a href="#"></a>').html(matches[key]).click(function (e) { e.preventDefault(); }))
-      .mousedown(function () { ac.select(this); })
-      .mouseover(function () { ac.highlight(this); })
-      .mouseout(function () { ac.unhighlight(this); })
+      .html($('<a href="#"></a>').html(matches[key]).on('click', function (e) { e.preventDefault(); }))
+      .on('mousedown', function () { ac.hidePopup(this); })
+      .on('mouseover', function () { ac.highlight(this); })
+      .on('mouseout', function () { ac.unhighlight(this); })
       .data('autocompleteValue', key)
       .appendTo(ul);
   }
@@ -137,11 +141,18 @@ var oldPrototype = Drupal.jsAC.prototype;
 /**
  * Override the autocomplete constructor.
  */
-Drupal.jsAC = function ($input, db, $context) {
+Drupal.jsAC = function ($input, db, context) {
   var ac = this;
-  this.$context = $context;
+
+  // Context is normally passed by Drupal.behaviors.autocomplete above. However,
+  // if a module has manually invoked this method they will likely not know
+  // about this feature and a global fallback context to document must be used.
+  // @see https://www.drupal.org/node/2594243
+  // @see https://www.drupal.org/node/2315295
+  this.$context = context && $(context) || $(document);
+
   this.input = $input[0];
-  this.ariaLive = $context.find('#' + this.input.id + '-autocomplete-aria-live');
+  this.ariaLive = this.$context.find('#' + this.input.id + '-autocomplete-aria-live');
   this.db = db;
   $input
     .keydown(function (event) { return ac.onkeydown(this, event); })
