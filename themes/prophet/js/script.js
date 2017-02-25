@@ -9,6 +9,9 @@ prophet = (function($){
 
 	function run() {
 
+		$('.rate-widget-2').find("li:first").addClass('first');
+		$('.rate-widget-2').find("li:last").addClass('last');
+
 		// Hack to hide trackable regex
 		$("#edit-title-wrapper input").val("")
 		$("#edit-title-wrapper input").css("color", "black");
