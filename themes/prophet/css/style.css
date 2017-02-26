@@ -106,34 +106,27 @@
 }
 
 .view-front-page-redesign .view-filters {
-	width: 190px;
 	margin-left: 20px;
-	border-left: solid 2px black;
+    margin-top: 10px;
+    margin-right: 10px;
+    border-left: solid 2px black;
 	border-top: solid 2px black;
-	height: 240px;
 	border-top-left-radius: 35px;
+	width: 410px;
+}
+
+.form-item.form-item-thought-type.form-type-select.form-group {
+    width: inherit;
+    margin-top: 15px;
+}
+
+.views-exposed-form {
+	padding-top: 30px;
+	padding-left: 30px;
 }
 
 .tooltip {
 	display: none !important;
-}
-
-#edit-uid-wrapper {
-	position: relative;
-	top: -85px;
-	left: 35px;
-}
-
-#edit-title-wrapper {
-	position: relative;
-	top: -85px;
-	left: 35px;
-}
-
-#views-exposed-form-front-page-redesign-block .views-submit-button {
-	position: relative;
-	top: -75px;
-	left: 35px;
 }
 
 /* Thought Bubbles */
@@ -247,6 +240,7 @@ a.logo img {
 
 #block-views-front-page-redesign-block .form-control.form-select {
 	height: auto;
+	margin-top: 10px;
 }
 
 #block-views-front-page-redesign-block .views-row {
@@ -281,7 +275,11 @@ a.logo img {
 	margin: 0 auto;
 	text-align: center;
 	overflow: visible;
-	height: 25px;
+	position: relative;
+    top: 40px;
+    background: white;
+    width: 210px;
+    margin-top: -40px;
 }
 
 /* Misc */
@@ -389,6 +387,13 @@ div.rate-widget-2 ul li {
 
 .views-exposed-form .views-exposed-widget button.form-submit {
 	margin-top: 0px;
+	width: 145px;
+}
+
+.views-exposed-form .form-item {
+    width: 124px;
+    float: left;
+    padding-right: 8px;
 }
 
 .front h1.page-header {
