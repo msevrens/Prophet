@@ -13,8 +13,8 @@ prophet = (function($){
 		$('.rate-widget-2').find("li:last").addClass('last');
 
 		// Hack to hide trackable regex
-		$("#edit-title-wrapper input").val("")
-		$("#edit-title-wrapper input").css("color", "black");
+		$("#edit-title").val("")
+		$("#edit-title").css("color", "black");
 
 		// Truth Rating widget
 		$(".rate-fivestar-processed a").hover(
