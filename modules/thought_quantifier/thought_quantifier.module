@@ -222,6 +222,9 @@ function get_temporal_focus($user) {
 
       foreach ($counted as $date => $counts) {
         $total_thoughts = $counts['Predict'] + $counts['Reflect'] + $counts['State'];
+        if ($total_thoughts < 1) {
+          continue;
+        }
         $percent_predictions = $counts['Predict'] / $total_thoughts;
         $percent_reflections = $counts['Reflect'] / $total_thoughts;
         $percent_statements = $counts['State'] / $total_thoughts;
