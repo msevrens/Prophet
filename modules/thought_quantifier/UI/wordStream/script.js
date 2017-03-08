@@ -383,6 +383,23 @@ buildWordStream = (function($){
 				url += title_query.substring(0, 128)
 			}
 
+			// AJAX load bubblestream
+			// Todo Set params and tweak UI
+			/*
+			$.ajax({
+			    type: 'POST',
+			    url: Drupal.settings.basePath + 'views/ajax',
+			    dataType: 'json',
+			    data: 'view_name=' + 'front_page_redesign' + '&view_display_id=default',
+			    success: function(data) {
+			      console.log(data[1].data)
+			    },
+			    error: function(data) {
+			      target.html('An error occured!');
+			    }
+			  });
+			*/
+
 			window.open(url, '_blank');
 
 		})
