@@ -340,9 +340,9 @@ buildTrackablesVisualization = (function($){
 			pathLength = pathEl.getTotalLength();
 		
 		// Ghost Data
-		if (methodDefaultStr = "sum") {
-			var xAverage = pathEl.getPointAtLength(pathLength)["y"],
-				yesterdayAverage = mY.invert(xAverage),
+		if (methodDefaultStr == "sum") {
+			var yAverage = pathEl.getPointAtLength(pathLength)["y"],
+				yesterdayAverage = mY.invert(yAverage),
 				now = new Date(),
 				lastDateLogged = format.parse(globalData[globalData.length - 1]["date"]),
 				millisElapsed = now - lastDateLogged,
@@ -350,11 +350,24 @@ buildTrackablesVisualization = (function($){
 				percentIntoDay = millisElapsed / millisInPeriod
 				ghostY = percentIntoDay * yesterdayAverage;
 
-			var ghostData = svg.append("circle")
-				.attr("class", "ghost-data")
-				.attr("r", dotSize)
-				.attr("cx", width - legendWidth - 2)
-				.attr("cy", function(d) { return mY(ghostY); });
+			if (groupbyDefaultStr == "week") {
+				if (millisElapsed < 604800000) {
+					var ghostData = svg.append("circle")
+						.attr("class", "ghost-data")
+						.attr("r", dotSize)
+						.attr("cx", width - legendWidth - 2)
+						.attr("cy", function(d) { return mY(ghostY); });
+				}
+			} else {
+				if (millisElapsed < 86400000) {
+					var ghostData = svg.append("circle")
+						.attr("class", "ghost-data")
+						.attr("r", dotSize)
+						.attr("cx", width - legendWidth - 2)
+						.attr("cy", function(d) { return mY(ghostY); });
+				}
+			}
+
 		}
 
 		// Track Line
