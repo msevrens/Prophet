@@ -171,8 +171,8 @@ buildTrackablesVisualization = (function($){
 		// Set Up Controls
 
 		var tagDefault = getURLParameter("tag") ? getURLParameter("tag") : "temporalFocus",
-			groupbyDefault = getURLParameter("groupby") ? getURLParameter("groupby") : "week",
-			groupbyDefault = groupbyDefault == "week" ? true : false,
+			groupbyDefaultTag = getURLParameter("groupby") ? getURLParameter("groupby") : "week",
+			groupbyDefault = groupbyDefaultTag == "week" ? true : false,
 			methodDefault = getURLParameter("method") ? getURLParameter("method") : "average",
 			methodDefault = methodDefault == "sum" ? true : false;
 
@@ -344,10 +344,10 @@ buildTrackablesVisualization = (function($){
 			var xAverage = pathEl.getPointAtLength(pathLength)["y"],
 				yesterdayAverage = mY.invert(xAverage),
 				now = new Date(),
-				midnight = new Date().setHours(0,0,0,0),
-				millisElapsedToday = now - midnight,
-				millisInDay = 24 * 60 * 60 * 1000,
-				percentIntoDay = millisElapsedToday / millisInDay
+				lastDateLogged = format.parse(globalData[globalData.length - 1]["date"]),
+				millisElapsed = now - lastDateLogged,
+				millisInPeriod = (groupbyDefaultTag == "week") ? 604800000 : 86400000,
+				percentIntoDay = millisElapsed / millisInPeriod
 				ghostY = percentIntoDay * yesterdayAverage;
 
 			var ghostData = svg.append("circle")
