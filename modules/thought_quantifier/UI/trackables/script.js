@@ -171,10 +171,10 @@ buildTrackablesVisualization = (function($){
 		// Set Up Controls
 
 		var tagDefault = getURLParameter("tag") ? getURLParameter("tag") : "temporalFocus",
-			groupbyDefaultTag = getURLParameter("groupby") ? getURLParameter("groupby") : "week",
-			groupbyDefault = groupbyDefaultTag == "week" ? true : false,
-			methodDefault = getURLParameter("method") ? getURLParameter("method") : "average",
-			methodDefault = methodDefault == "sum" ? true : false;
+			groupbyDefaultStr = getURLParameter("groupby") ? getURLParameter("groupby") : "week",
+			groupbyDefault = groupbyDefaultStr == "week" ? true : false,
+			methodDefaultStr = getURLParameter("method") ? getURLParameter("method") : "average",
+			methodDefault = methodDefaultStr == "sum" ? true : false;
 
 		var tagList = d3.select(".trackables-chart").append("select")
 			.attr("class", "form-control form-control-sm tag-list")
@@ -340,13 +340,13 @@ buildTrackablesVisualization = (function($){
 			pathLength = pathEl.getTotalLength();
 		
 		// Ghost Data
-		if (tag == "#token") {
+		if (methodDefaultStr = "sum") {
 			var xAverage = pathEl.getPointAtLength(pathLength)["y"],
 				yesterdayAverage = mY.invert(xAverage),
 				now = new Date(),
 				lastDateLogged = format.parse(globalData[globalData.length - 1]["date"]),
 				millisElapsed = now - lastDateLogged,
-				millisInPeriod = (groupbyDefaultTag == "week") ? 604800000 : 86400000,
+				millisInPeriod = (groupbyDefaultStr == "week") ? 604800000 : 86400000,
 				percentIntoDay = millisElapsed / millisInPeriod
 				ghostY = percentIntoDay * yesterdayAverage;
 
