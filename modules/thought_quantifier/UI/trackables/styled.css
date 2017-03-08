@@ -66,6 +66,10 @@ p {
     margin-left: 0px;
 }
 
+.ghost-data {
+  opacity: 0.2;
+}
+
 .no-thoughts {
   width: 365px;
   font-family: 'Quicksand', sans-serif;

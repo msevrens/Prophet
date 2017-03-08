@@ -273,9 +273,9 @@ buildTrackablesVisualization = (function($){
 
 		var colorScale = d3.scale.linear().domain([-1, 0, 1]).range(colorGradient);
 
-		var x = d3.time.scale().domain(timeRange).range([0, width - legendWidth]),
-			y = d3.scale.linear().domain([-1, 1]).range([height, 0])
-			mY = d3.scale.linear().domain(trackableRange).range([height, 0]);
+		var x = d3.time.scale().domain(timeRange).range([2, width - legendWidth - 2]),
+			y = d3.scale.linear().domain([-1, 1]).range([height - 2, 2])
+			mY = d3.scale.linear().domain(trackableRange).range([height - 2, 2]);
 
 		var maSpread = globalData.length < 10 ? 2 : 5
 
@@ -284,18 +284,6 @@ buildTrackablesVisualization = (function($){
 			.interpolate(movingAvg(maSpread))
 			.x(function(d) { return x(d.date); })
 			.y(function(d) { return mY(d.value); });
-
-		// TODO: Load prophet thoughts via brush selection
-
-		// Scatterplot
-		var dotSize = (width > 800) ? 2 : 1; 
-
-		svg.selectAll("dot")
-			.data(trackable)
-			.enter().append("circle")
-			.attr("r", dotSize)
-			.attr("cx", function(d) { return x(d.date); })
-			.attr("cy", function(d) { return mY(d.value); });
 		
 		// Draw Axes
 		var formatMillisecond = d3.time.format(".%L"),
@@ -326,6 +314,7 @@ buildTrackablesVisualization = (function($){
 			.attr("transform", "translate(0, " + height + ")")
 			.call(XAxis);
 
+		// Draw Moving Average
 		field.append("path")
 			.datum(trackable)
 			.attr("class", "fat-line")
@@ -337,12 +326,39 @@ buildTrackablesVisualization = (function($){
 			.attr("class", "line")
 			.attr("d", line);
 
-		var pathEl = path.node();
-		var pathLength = pathEl.getTotalLength();
+		// Scatterplot
+		var dotSize = (width > 800) ? 2 : 1; 
+
+		svg.selectAll("dot")
+			.data(trackable)
+			.enter().append("circle")
+			.attr("r", dotSize)
+			.attr("cx", function(d) { return x(d.date); })
+			.attr("cy", function(d) { return mY(d.value); });
+
+		var pathEl = path.node(),
+			pathLength = pathEl.getTotalLength();
+		
+		// Ghost Data
+		if (tag == "#token") {
+			var xAverage = pathEl.getPointAtLength(pathLength)["y"],
+				yesterdayAverage = mY.invert(xAverage),
+				now = new Date(),
+				midnight = new Date().setHours(0,0,0,0),
+				millisElapsedToday = now - midnight,
+				millisInDay = 24 * 60 * 60 * 1000,
+				percentIntoDay = millisElapsedToday / millisInDay
+				ghostY = percentIntoDay * yesterdayAverage;
+
+			var ghostData = svg.append("circle")
+				.attr("class", "ghost-data")
+				.attr("r", dotSize)
+				.attr("cx", width - legendWidth - 2)
+				.attr("cy", function(d) { return mY(ghostY); });
+		}
 
 		// Track Line
-		var circle = 
-        svg.append("circle")
+		var circle = svg.append("circle")
           .attr("cx", 100)
           .attr("cy", 350)
           .attr("r", 3)
