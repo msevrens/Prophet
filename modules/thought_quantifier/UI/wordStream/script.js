@@ -370,37 +370,38 @@ buildWordStream = (function($){
 				max = format(dates[1])
 				words = $("select.multiselect").val();
 
-			url += "?created[min]=" + min + "&created[max]=" + max
+			var params = "?created[min]=" + min + "&created[max]=" + max;
 
 			if (words.length <= 10) {
-				url += "&title="
+				params += "&title="
 				title_query = ""
 
 				for (var i = 0; i < words.length; i++) { 
 					title_query += words[i] + "+";
 				}
 
-				url += title_query.substring(0, 128)
+				params += title_query.substring(0, 128)
 			}
 
-			// AJAX load bubblestream
-			// Todo Set params and tweak UI
+			// AJAX Load Bubblestream
 			/*
 			$.ajax({
 			    type: 'POST',
-			    url: Drupal.settings.basePath + 'views/ajax',
+			    url: Drupal.settings.basePath + 'views/ajax/' + params,
 			    dataType: 'json',
-			    data: 'view_name=' + 'front_page_redesign' + '&view_display_id=default',
+			    data: {
+					view_name: 'front_page_redesign',
+				    view_display_id: 'block'
+				},
 			    success: function(data) {
-			      console.log(data[1].data)
+			      $("#block-thought-quantifier-word-stream-block").append(data[1].data)
 			    },
 			    error: function(data) {
 			      target.html('An error occured!');
 			    }
-			  });
-			*/
+			}); */
 
-			window.open(url, '_blank');
+			window.open(url + params, '_blank');
 
 		})
 
