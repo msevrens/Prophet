@@ -292,7 +292,7 @@ a.logo img {
 	font-family: 'Quicksand', sans-serif;
 }
 
-a:visited {
+a, a:visited, a:hover {
 	color: rgb(117, 108, 122);	
 }
 

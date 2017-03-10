@@ -59,3 +59,7 @@ p {
     margin-bottom: 0;
     list-style: none;
 }
+
+.bubble-stream .views-field-title a {
+  color: #222;
+}

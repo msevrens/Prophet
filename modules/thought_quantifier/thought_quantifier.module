@@ -145,6 +145,7 @@ function thought_quantifier_block_view($delta = '') {
             $m_path . '/UI/wordStream/bootstrap-multiselect.js',
             $m_path . '/UI/wordStream/script.js',
             $r_path . '/templates/fivestar/fivestar.js',
+            $r_path . '/rate.js'
           ],
           'css' => [
             $m_path . '/UI/wordStream/styled.css',

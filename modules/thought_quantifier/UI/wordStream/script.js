@@ -386,7 +386,7 @@ buildWordStream = (function($){
 			}
 
 			// AJAX Load Bubblestream
-			/*
+			
 			$.ajax({
 			    type: 'POST',
 			    url: Drupal.settings.basePath + 'views/ajax/' + params,
@@ -398,15 +398,19 @@ buildWordStream = (function($){
 			    success: function(data) {
 					var viewHtml = $(data[1].data)
 					viewHtml.find(".view-filters").remove()
+					viewHtml.find('.rate-button').each(function (index, value) {
+						var href = $(value).attr('href').replace("views/ajax", "");
+						$(value).attr('href', href)
+					})
 					$(".bubble-stream").html(viewHtml)
+					Drupal.behaviors.rate_fivestar.attach()
 			    },
 			    error: function(data) {
 			    	console.log('An error occured!');
 			    }
 			}); 
-			*/
-
-			window.open(url + params, '_blank');
+			
+			//window.open(url + params, '_blank');
 
 		})
 
