@@ -80,27 +80,27 @@
   display: none;
 }
 
-.front .view-front-page-redesign {
+.view-front-page-redesign {
 	font-family: 'Quicksand', sans-serif;
 }
 
-.front .view-front-page-redesign .views-field-title {
+.view-front-page-redesign .views-field-title {
 	font-size: 22px;
 }
 
-.front #block-views-notification-stream-block {
+#block-views-notification-stream-block {
 	width: 655px;
 	margin: 0 auto;
 }
 
-.front .view-notification-stream {
+.view-notification-stream {
 	padding-left: 55px;
 	background-image: url("./2x2_black.gif");
 	background-repeat: repeat-y;
 	background-position: 20px 0px;
 }
 
-.front .region-content h2 {
+.region-content h2 {
 	margin-top: 10px;
 	font-size: 27px;
 }

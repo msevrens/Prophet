@@ -403,7 +403,8 @@ buildWordStream = (function($){
 			    error: function(data) {
 			    	console.log('An error occured!');
 			    }
-			}); */
+			}); 
+			*/
 
 			window.open(url + params, '_blank');
 

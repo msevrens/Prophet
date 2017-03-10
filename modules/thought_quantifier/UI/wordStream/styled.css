@@ -24,6 +24,7 @@ p {
 .widget {
   margin-left: 25px;
   margin-top: 15px;
+  float: left;
 }
 
 .brush .extent {
@@ -32,11 +33,29 @@ p {
 }
 
 #load-thoughts {
-  margin: 15px 25px;
+  margin: 15px;
 }
 
 .stream-tooltip {
   font-family: 'Quicksand', sans-serif;
   color: #777;
   font-size: 14px;
+}
+
+.bubble-stream {
+  width: 655px;
+  margin: 0 auto;
+}
+
+.bubble-stream .rate-widget-fivestar ul {
+    padding-left: 0px;
+}
+
+.bubble-stream .rate-widget-2 ul li{
+    margin-right: 10px;
+}
+
+.bubble-stream .rate-widget-2 ul {
+    margin-bottom: 0;
+    list-style: none;
 }
