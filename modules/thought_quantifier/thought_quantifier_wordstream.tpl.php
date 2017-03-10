@@ -123,6 +123,7 @@
         buildWordStream(streamData);
       }
     </script>
+    <div class="bubble-stream"></div>
   <?php endif; ?>
 </div>
 

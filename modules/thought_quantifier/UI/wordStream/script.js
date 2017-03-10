@@ -394,10 +394,12 @@ buildWordStream = (function($){
 				    view_display_id: 'block'
 				},
 			    success: function(data) {
-			      $("#block-thought-quantifier-word-stream-block").append(data[1].data)
+					var viewHtml = $(data[1].data)
+					viewHtml.find(".view-filters").remove()
+					$(".bubble-stream").html(viewHtml)
 			    },
 			    error: function(data) {
-			      target.html('An error occured!');
+			    	console.log('An error occured!');
 			    }
 			}); */
 

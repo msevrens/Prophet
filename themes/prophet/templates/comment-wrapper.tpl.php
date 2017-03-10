@@ -42,14 +42,14 @@ hide($content['comment_form']['comment_body']['und'][0]['format']);
 <div id="comments" class="<?php print $classes; ?>"<?php print $attributes; ?>>
   <?php if ($content['comments'] && $node->type != 'forum'): ?>
     <?php print render($title_prefix); ?>
-    <h2 class="title"><?php print t('Reflection'); ?></h2>
+    <h2 class="title"><?php print t('Respond'); ?></h2>
     <?php print render($title_suffix); ?>
   <?php endif; ?>
 
   <?php print render($content['comments']); ?>
 
   <?php if ($content['comment_form']): ?>
-    <h2 class="title comment-form"><?php print t('Reflect'); ?></h2>
+    <h2 class="title comment-form"><?php print t('Respond'); ?></h2>
     <?php print render($content['comment_form']); ?>
   <?php endif; ?>
 </div>

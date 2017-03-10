@@ -58,12 +58,20 @@ function thought_quantifier_menu() {
   $items['wordstream'] = array(
     'type' => MENU_CALLBACK,
     'page callback' => 'theme_wordstream_page',
+    'access_callback' => 'user_is_logged_in',
     'access arguments' => array('access content'),
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'main-menu',
+    'title' => t('Stream Search')
   );
   $items['trackables'] = array(
     'type' => MENU_CALLBACK,
     'page callback' => 'theme_trackables_page',
+    'access_callback' => 'user_is_logged_in',
     'access arguments' => array('access content'),
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'main-menu',
+    'title' => t('Trackables')
   );
   return $items;
 }
@@ -120,6 +128,7 @@ function thought_quantifier_block_view($delta = '') {
 
   $block = array();
   $m_path = drupal_get_path('module', 'thought_quantifier');
+  $r_path = drupal_get_path('module', 'rate');
 
   switch ($delta) {
     case 'thought_quantifier_block':
@@ -134,11 +143,13 @@ function thought_quantifier_block_view($delta = '') {
           'js' => [
             'http://d3js.org/d3.v2.js',
             $m_path . '/UI/wordStream/bootstrap-multiselect.js',
-            $m_path . '/UI/wordStream/script.js'
+            $m_path . '/UI/wordStream/script.js',
+            $r_path . '/templates/fivestar/fivestar.js',
           ],
           'css' => [
             $m_path . '/UI/wordStream/styled.css',
-            $m_path . '/UI/wordStream/bootstrap-multiselect.css'
+            $m_path . '/UI/wordStream/bootstrap-multiselect.css',
+            $r_path . '/templates/fivestar/fivestar.css'
           ]
         ]
       ];
