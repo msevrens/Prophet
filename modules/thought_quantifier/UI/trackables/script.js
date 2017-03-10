@@ -255,7 +255,7 @@ buildTrackablesVisualization = (function($){
 		var mouthPosY = (height / 2) - (faceSize / 2) + (faceSize / 4),
 			mouthPosX = 1.25,
 			mouthScale = width / 960,
-			mouthScale = (mouthScale > 1.04) ? 1.04 : mouthScale;
+			mouthScale = (mouthScale > 1.043) ? 1.043 : mouthScale;
 
 		faceContainer.append("path")
 			.attr("class", "mouth")
