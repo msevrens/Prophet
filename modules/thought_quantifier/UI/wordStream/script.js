@@ -372,6 +372,8 @@ buildWordStream = (function($){
 
 			var params = "?created[min]=" + min + "&created[max]=" + max;
 
+			params += "&uid=" + Drupal.settings.thought_quantifier.user_name;
+
 			if (words.length <= 10) {
 				params += "&title="
 				title_query = ""
