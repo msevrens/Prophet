@@ -146,7 +146,8 @@ buildTrackablesVisualization = (function($){
 			fatLineWidth = width / 35,
 			height = window.innerHeight / 2.5,
 			legendWidth = 0.1 * width,
-			faceSize = 0.7 * legendWidth;
+			legendWidth = (legendWidth > 100) ? 100 : legendWidth,
+			faceSize = 0.7 * legendWidth,
 			axisHeight = 20;
 
 		var svg = d3.select(".trackables-chart").append("svg")
@@ -226,7 +227,7 @@ buildTrackablesVisualization = (function($){
 		// Visual Y-Axis
 		var faceContainer = legend.append("g")
 			.attr("class", "face-container")
-			.attr("transform", "translate(" + 10 + ", 0)");
+			.attr("transform", "translate(" + (legendWidth - faceSize) / 2 + ", 0)");
 
 		faceContainer.append("circle")
 			.attr("class", "face")
@@ -252,8 +253,9 @@ buildTrackablesVisualization = (function($){
 
 		// Set base face to neutral
 		var mouthPosY = (height / 2) - (faceSize / 2) + (faceSize / 4),
-			mouthPosX = 1.5,
-			mouthScale = width / 960;
+			mouthPosX = 1.25,
+			mouthScale = width / 960,
+			mouthScale = (mouthScale > 1.04) ? 1.04 : mouthScale;
 
 		faceContainer.append("path")
 			.attr("class", "mouth")
