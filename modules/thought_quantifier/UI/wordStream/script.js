@@ -373,6 +373,7 @@ buildWordStream = (function($){
 			var params = "?created[min]=" + min + "&created[max]=" + max;
 
 			params += "&uid=" + Drupal.settings.thought_quantifier.user_name;
+			params += "&sort_order=ASC"
 
 			if (words.length <= 10) {
 				params += "&title="

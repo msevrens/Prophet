@@ -5,6 +5,10 @@
 
 @import url(http://fonts.googleapis.com/css?family=Quicksand:400,700);
 
+.views-widget-sort-by, .views-widget-sort-order {
+	display: none;
+}
+
 .views-field-value span { 
 	color: #aaa;
 }

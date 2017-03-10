@@ -145,8 +145,8 @@ buildTrackablesVisualization = (function($){
 			width = window.innerWidth - margin,
 			fatLineWidth = width / 35,
 			height = window.innerHeight / 2.5,
-			faceSize = 70;
-			legendWidth = 100,
+			legendWidth = 0.1 * width,
+			faceSize = 0.7 * legendWidth;
 			axisHeight = 20;
 
 		var svg = d3.select(".trackables-chart").append("svg")
@@ -157,7 +157,7 @@ buildTrackablesVisualization = (function($){
 		var legend = d3.select(".trackables-chart").append("svg")
 			.attr("class", "legend")
 			.attr("height", height)
-			.attr("width", faceSize + 20);
+			.attr("width", legendWidth);
 
 		// Tooltip
 		var tooltip = legend.append("text")
@@ -223,6 +223,7 @@ buildTrackablesVisualization = (function($){
 		$('.groupby-toggle').change(updateChart)
 		$('.method-toggle').change(updateChart)
 
+		// Visual Y-Axis
 		var faceContainer = legend.append("g")
 			.attr("class", "face-container")
 			.attr("transform", "translate(" + 10 + ", 0)");
@@ -239,22 +240,24 @@ buildTrackablesVisualization = (function($){
 			.attr("class", "eye")
 			.attr("cx", (faceSize / 2) - (faceSize / 5))
 			.attr("cy", (height / 2) - (faceSize / 6))
-			.attr("r", 2.5)
+			.attr("r", faceSize / 25)
 			.attr("fill", "black");
 
 		faceContainer.append("circle")
 			.attr("class", "eye")
 			.attr("cx", (faceSize / 2) + (faceSize / 5))
 			.attr("cy", (height / 2) - (faceSize / 6))
-			.attr("r", 2.5)
+			.attr("r", faceSize / 25)
 			.attr("fill", "black");
 
 		// Set base face to neutral
-		var mouthPos = (height / 2) - (faceSize / 2) + (faceSize / 4)
+		var mouthPosY = (height / 2) - (faceSize / 2) + (faceSize / 4),
+			mouthPosX = 1.5,
+			mouthScale = width / 960;
 
 		faceContainer.append("path")
 			.attr("class", "mouth")
-			.attr("transform", "translate(3," + mouthPos + ")scale(1,1)")
+			.attr("transform", "translate(" + mouthPosX + "," + mouthPosY + ")scale(" + mouthScale + "," + mouthScale + ")")
 			.attr("d", neutral)
 
 		// Get Facial State Map
