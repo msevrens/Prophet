@@ -402,6 +402,10 @@ buildWordStream = (function($){
 						var href = $(value).attr('href').replace("views/ajax", "");
 						$(value).attr('href', href)
 					})
+					viewHtml.find('.pagination a').each(function (index, value) {
+						var href = $(value).attr('href').replace("views/ajax", "");
+						$(value).attr('href', href)
+					})
 					$(".bubble-stream").html(viewHtml)
 					Drupal.behaviors.rate_fivestar.attach()
 			    },
@@ -410,6 +414,7 @@ buildWordStream = (function($){
 			    }
 			}); 
 			
+
 			//window.open(url + params, '_blank');
 
 		})
