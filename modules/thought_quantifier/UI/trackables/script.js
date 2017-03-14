@@ -295,8 +295,8 @@ buildTrackablesVisualization = (function($){
 		var scaleMargin = fatLineWidth / 3,
 			focusXScale = d3.time.scale().domain(timeRange).range([scaleMargin, chartWidth - scaleMargin]),
 			contextXScale = d3.time.scale().domain(timeRange).range([0, chartWidth]),
-			y = d3.scale.linear().domain([-1, 1]).range([height - scaleMargin, scaleMargin])
-			mY = d3.scale.linear().domain(trackableRange).range([height - scaleMargin, scaleMargin])
+			y = d3.scale.linear().domain([-1, 1]).range([focusHeight - scaleMargin, scaleMargin])
+			mY = d3.scale.linear().domain(trackableRange).range([focusHeight - scaleMargin, scaleMargin])
 			cy = d3.scale.linear().domain([-1, 1]).range([contextHeight, 0]),
 			cmy = d3.scale.linear().domain(trackableRange).range([contextHeight, 0]);
 
@@ -335,7 +335,7 @@ buildTrackablesVisualization = (function($){
 		    formatDay = d3.time.format("%a %d"),
 		    formatWeek = d3.time.format("%b %d"),
 		    formatMonth = d3.time.format("%b"),
-		    formatYear = d3.time.format("%Y");
+		    formatYear = d3.time.format("'%y");
 
 		function multiFormat(date) {
 		  return (d3.time.second(date) < date ? formatMillisecond
@@ -351,7 +351,7 @@ buildTrackablesVisualization = (function($){
 		
 		var axis = focus.append("g")
 			.attr("class", "x axis")
-			.attr("transform", "translate(0, " + height + ")")
+			.attr("transform", "translate(0, " + focusHeight + ")")
 			.call(XAxis);
 
 		// Draw Moving Average
