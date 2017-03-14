@@ -143,17 +143,27 @@ buildTrackablesVisualization = (function($){
 
 		var margin = 15,
 			width = window.innerWidth - margin,
-			fatLineWidth = width / 35,
 			height = window.innerHeight / 2.5,
+			fatLineWidth = width / 40,
 			legendWidth = 0.1 * width,
 			legendWidth = (legendWidth > 100) ? 100 : legendWidth,
+			chartWidth = width - legendWidth,
 			faceSize = 0.7 * legendWidth,
-			axisHeight = 20;
+			axisHeight = 20
+			contextHeight = .15 * height,
+			focusHeight = height - contextHeight;
 
 		var svg = d3.select(".trackables-chart").append("svg")
 			.attr("class", "main-svg")
-			.attr("width", width - legendWidth)
+			.attr("width", chartWidth)
 			.attr("height", height + axisHeight);
+
+		var context = svg.append("g")
+			.attr("class", "context");
+
+		var focus = svg.append("g")
+    		.attr("class", "focus")
+    		.attr("transform", "translate(0, " + contextHeight + ")");
 
 		var legend = d3.select(".trackables-chart").append("svg")
 			.attr("class", "legend")
@@ -241,14 +251,14 @@ buildTrackablesVisualization = (function($){
 			.attr("class", "eye")
 			.attr("cx", (faceSize / 2) - (faceSize / 5))
 			.attr("cy", (height / 2) - (faceSize / 6))
-			.attr("r", faceSize / 25)
+			.attr("r", faceSize / 28)
 			.attr("fill", "black");
 
 		faceContainer.append("circle")
 			.attr("class", "eye")
 			.attr("cx", (faceSize / 2) + (faceSize / 5))
 			.attr("cy", (height / 2) - (faceSize / 6))
-			.attr("r", faceSize / 25)
+			.attr("r", faceSize / 28)
 			.attr("fill", "black");
 
 		// Set base face to neutral
@@ -282,17 +292,40 @@ buildTrackablesVisualization = (function($){
 
 		var colorScale = d3.scale.linear().domain([-1, 0, 1]).range(colorGradient);
 
-		var x = d3.time.scale().domain(timeRange).range([2, width - legendWidth - 2]),
-			y = d3.scale.linear().domain([-1, 1]).range([height - 2, 2])
-			mY = d3.scale.linear().domain(trackableRange).range([height - 2, 2]);
+		var scaleMargin = fatLineWidth / 3,
+			focusXScale = d3.time.scale().domain(timeRange).range([scaleMargin, chartWidth - scaleMargin]),
+			contextXScale = d3.time.scale().domain(timeRange).range([0, chartWidth]),
+			y = d3.scale.linear().domain([-1, 1]).range([height - scaleMargin, scaleMargin])
+			mY = d3.scale.linear().domain(trackableRange).range([height - scaleMargin, scaleMargin])
+			cy = d3.scale.linear().domain([-1, 1]).range([contextHeight, 0]),
+			cmy = d3.scale.linear().domain(trackableRange).range([contextHeight, 0]);
+
+		// Selection and Brushing
+		var brush = d3.svg.brush()
+			.x(contextXScale)
+			.on("brush", function() {
+				focusXScale.domain(brush.empty() ? timeRange : brush.extent());
+				focus.selectAll("path").attr("d", line);
+				focus.selectAll("circle")
+					.attr("r", dotSize)
+					.attr("cx", function(d) { return focusXScale(d.date); })
+					.attr("cy", function(d) { return mY(d.value); });
+				focus.select(".x.axis").call(XAxis);
+			});
 
 		var maSpread = globalData.length < 10 ? 2 : 5
 
 		// Line 
 		var line = d3.svg.line()
 			.interpolate(movingAvg(maSpread))
-			.x(function(d) { return x(d.date); })
+			.x(function(d) { return focusXScale(d.date); })
 			.y(function(d) { return mY(d.value); });
+
+		// Line 
+		var contextLine = d3.svg.line()
+			.interpolate(movingAvg(maSpread))
+			.x(function(d) { return focusXScale(d.date); })
+			.y(function(d) { return cmy(d.value); });
 		
 		// Draw Axes
 		var formatMillisecond = d3.time.format(".%L"),
@@ -314,35 +347,47 @@ buildTrackablesVisualization = (function($){
 		      : formatYear)(date);
 		}
 
-		var XAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(multiFormat);
-
-		var field = svg.append("g").attr("height", height);
+		var XAxis = d3.svg.axis().scale(focusXScale).orient("bottom").tickFormat(multiFormat);
 		
-  		var axis = svg.append("g")
+		var axis = focus.append("g")
 			.attr("class", "x axis")
 			.attr("transform", "translate(0, " + height + ")")
 			.call(XAxis);
 
 		// Draw Moving Average
-		field.append("path")
+		focus.append("path")
 			.datum(trackable)
 			.attr("class", "fat-line")
 			.attr("stroke-width", fatLineWidth + "px")
 			.attr("d", line);
 
-		var path = field.append("path")
+		var path = focus.append("path")
 			.datum(trackable)
 			.attr("class", "line")
 			.attr("d", line);
 
+		// Add Brush
+		var contextPath = context.append("path")
+			.datum(trackable)
+			.style("stroke-width", "3px")
+			.style("stroke", "#ececec")
+			.style("fill", "none")
+			.attr("d", contextLine);
+
+		context.append("g")
+			.attr("class", "x brush")
+			.call(brush)
+			.selectAll("rect")
+			.attr("height", contextHeight);
+
 		// Scatterplot
 		var dotSize = (width > 800) ? 2 : 1; 
 
-		svg.selectAll("dot")
+		focus.selectAll("dot")
 			.data(trackable)
 			.enter().append("circle")
 			.attr("r", dotSize)
-			.attr("cx", function(d) { return x(d.date); })
+			.attr("cx", function(d) { return focusXScale(d.date); })
 			.attr("cy", function(d) { return mY(d.value); });
 
 		var pathEl = path.node(),
@@ -361,18 +406,18 @@ buildTrackablesVisualization = (function($){
 
 			if (groupbyDefaultStr == "week") {
 				if (millisElapsed < 604800000) {
-					var ghostData = svg.append("circle")
+					var ghostData = focus.append("circle")
 						.attr("class", "ghost-data")
 						.attr("r", dotSize)
-						.attr("cx", width - legendWidth - 2)
+						.attr("cx", chartWidth - 2)
 						.attr("cy", function(d) { return mY(ghostY); });
 				}
 			} else {
 				if (millisElapsed < 86400000) {
-					var ghostData = svg.append("circle")
+					var ghostData = focus.append("circle")
 						.attr("class", "ghost-data")
 						.attr("r", dotSize)
-						.attr("cx", width - legendWidth - 2)
+						.attr("cx", chartWidth - 2)
 						.attr("cy", function(d) { return mY(ghostY); });
 				}
 			}
@@ -380,7 +425,7 @@ buildTrackablesVisualization = (function($){
 		}
 
 		// Track Line
-		var circle = svg.append("circle")
+		var circle = focus.append("circle")
           .attr("cx", 100)
           .attr("cy", 350)
           .attr("r", 3)
@@ -390,7 +435,7 @@ buildTrackablesVisualization = (function($){
         	timeFormat = d3.time.format("%m/%d/%Y");
 
 		// Interactive Face
-		svg.on("mousemove", function() {
+		focus.on("mousemove", function() {
 			var mouse = d3.mouse(this),
 				xPos = mouse[0],
 				beginning = mouse[0], 
@@ -416,7 +461,7 @@ buildTrackablesVisualization = (function($){
 				.attr("cy", pos.y);
 
 			var scaledY = y.invert(pos.y),
-				date = x.invert(pos.x),
+				date = focusXScale.invert(pos.x),
 				color = colorScale(scaledY),
 				scaledIndex = funcScale(scaledY),
 				funcToUse = Math.floor(scaledIndex),
@@ -445,15 +490,24 @@ buildTrackablesVisualization = (function($){
   		});
 
 		// Baseline
-		field.append("line")
+		focus.append("line")
 			.style("stroke", "black")
 			.style("opacity", 0.1)  // colour the line
 			.attr("x1", 0)	 // x position of the first end of the line
 			.attr("y1", height / 2)	  // y position of the first end of the line
-			.attr("x2", width - legendWidth)	 // x position of the second end of the line
+			.attr("x2", chartWidth)	 // x position of the second end of the line
 			.attr("y2", height / 2);	// y position of the second end of the line
 
-		// Gradient
+		// Bottom of Context
+		context.append("line")
+			.style("stroke", "black")
+			.style("opacity", 0.2)
+			.attr("x1", 100)
+			.attr("y1", contextHeight)
+			.attr("x2", chartWidth - 100)
+			.attr("y2", contextHeight);
+
+		// Gradients
 		svg.append("linearGradient")
 			.attr("id", "temperature-gradient")
 			.attr("gradientUnits", "userSpaceOnUse")
