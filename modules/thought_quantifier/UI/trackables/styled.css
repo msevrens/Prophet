@@ -45,6 +45,7 @@ p {
   fill: none;
   stroke: url(#temperature-gradient);
   opacity: 0.65;
+  stroke-linecap: round;
 }
 
 .widget {

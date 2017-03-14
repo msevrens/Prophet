@@ -143,7 +143,7 @@ buildTrackablesVisualization = (function($){
 
 		var margin = 15,
 			width = window.innerWidth - margin,
-			height = window.innerHeight / 2.5,
+			height = window.innerHeight / 1.6,
 			fatLineWidth = width / 40,
 			legendWidth = 0.1 * width,
 			legendWidth = (legendWidth > 100) ? 100 : legendWidth,
@@ -286,12 +286,14 @@ buildTrackablesVisualization = (function($){
 		var tag = "#" + tagDefault,
 			trackableRange = tag == "#temporalFocus" ? [-1, 1] : trackableRange;
 
+		// Colors
 		var moodColors = ['#694a69', 'steelblue', 'yellow'],
 			tfColors = ["#8E2B2B", "#3276B1", "#50457B"],
 			colorGradient = tag == "#temporalFocus" ? tfColors : moodColors;
 
 		var colorScale = d3.scale.linear().domain([-1, 0, 1]).range(colorGradient);
 
+		// Scales
 		var scaleMargin = fatLineWidth / 3,
 			focusXScale = d3.time.scale().domain(timeRange).range([scaleMargin, chartWidth - scaleMargin]),
 			contextXScale = d3.time.scale().domain(timeRange).range([0, chartWidth]),
@@ -300,34 +302,7 @@ buildTrackablesVisualization = (function($){
 			cy = d3.scale.linear().domain([-1, 1]).range([contextHeight, 0]),
 			cmy = d3.scale.linear().domain(trackableRange).range([contextHeight, 0]);
 
-		// Selection and Brushing
-		var brush = d3.svg.brush()
-			.x(contextXScale)
-			.on("brush", function() {
-				focusXScale.domain(brush.empty() ? timeRange : brush.extent());
-				focus.selectAll("path").attr("d", line);
-				focus.selectAll("circle")
-					.attr("r", dotSize)
-					.attr("cx", function(d) { return focusXScale(d.date); })
-					.attr("cy", function(d) { return mY(d.value); });
-				focus.select(".x.axis").call(XAxis);
-			});
-
-		var maSpread = globalData.length < 10 ? 2 : 5
-
-		// Line 
-		var line = d3.svg.line()
-			.interpolate(movingAvg(maSpread))
-			.x(function(d) { return focusXScale(d.date); })
-			.y(function(d) { return mY(d.value); });
-
-		// Line 
-		var contextLine = d3.svg.line()
-			.interpolate(movingAvg(maSpread))
-			.x(function(d) { return focusXScale(d.date); })
-			.y(function(d) { return cmy(d.value); });
-		
-		// Draw Axes
+		// Axis
 		var formatMillisecond = d3.time.format(".%L"),
 		    formatSecond = d3.time.format(":%S"),
 		    formatMinute = d3.time.format("%I:%M"),
@@ -348,12 +323,39 @@ buildTrackablesVisualization = (function($){
 		}
 
 		var XAxis = d3.svg.axis().scale(focusXScale).orient("bottom").tickFormat(multiFormat);
-		
+
 		var axis = focus.append("g")
 			.attr("class", "x axis")
 			.attr("transform", "translate(0, " + focusHeight + ")")
 			.call(XAxis);
 
+		// Selection and Brushing
+		var brush = d3.svg.brush()
+			.x(contextXScale)
+			.on("brush", function() {
+				focusXScale.domain(brush.empty() ? timeRange : brush.extent());
+				focus.select(".x.axis").call(XAxis);
+				focus.selectAll("path").attr("d", line);
+				focus.selectAll("circle")
+					.attr("r", dotSize)
+					.attr("cx", function(d) { return focusXScale(d.date); })
+					.attr("cy", function(d) { return mY(d.value); });
+			});
+
+		var maSpread = globalData.length < 10 ? 2 : 5
+
+		// Line 
+		var line = d3.svg.line()
+			.interpolate(movingAvg(maSpread))
+			.x(function(d) { return focusXScale(d.date); })
+			.y(function(d) { return mY(d.value); });
+
+		// Line 
+		var contextLine = d3.svg.line()
+			.interpolate(movingAvg(maSpread))
+			.x(function(d) { return focusXScale(d.date); })
+			.y(function(d) { return cmy(d.value); });
+		
 		// Draw Moving Average
 		focus.append("path")
 			.datum(trackable)
@@ -409,7 +411,7 @@ buildTrackablesVisualization = (function($){
 					var ghostData = focus.append("circle")
 						.attr("class", "ghost-data")
 						.attr("r", dotSize)
-						.attr("cx", chartWidth - 2)
+						.attr("cx", chartWidth - scaleMargin)
 						.attr("cy", function(d) { return mY(ghostY); });
 				}
 			} else {
@@ -417,7 +419,7 @@ buildTrackablesVisualization = (function($){
 					var ghostData = focus.append("circle")
 						.attr("class", "ghost-data")
 						.attr("r", dotSize)
-						.attr("cx", chartWidth - 2)
+						.attr("cx", chartWidth - scaleMargin)
 						.attr("cy", function(d) { return mY(ghostY); });
 				}
 			}
@@ -494,9 +496,9 @@ buildTrackablesVisualization = (function($){
 			.style("stroke", "black")
 			.style("opacity", 0.1)  // colour the line
 			.attr("x1", 0)	 // x position of the first end of the line
-			.attr("y1", height / 2)	  // y position of the first end of the line
+			.attr("y1", focusHeight / 2)	  // y position of the first end of the line
 			.attr("x2", chartWidth)	 // x position of the second end of the line
-			.attr("y2", height / 2);	// y position of the second end of the line
+			.attr("y2", focusHeight / 2);	// y position of the second end of the line
 
 		// Bottom of Context
 		context.append("line")
