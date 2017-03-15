@@ -380,7 +380,8 @@ buildWordStream = (function($){
 				title_query = ""
 
 				for (var i = 0; i < words.length; i++) { 
-					title_query += words[i] + "+";
+					var term = i + 1 == words.length ? "(" + words[i] + ")" : "(" + words[i] + ")|";
+					title_query += encodeURIComponent(term);
 				}
 
 				params += title_query.substring(0, 128)

@@ -103,6 +103,7 @@ buildTrackablesVisualization = (function($){
 	}
 
 	/* Calculate Moving Average */
+
 	function movingAvg(n) {
 		return function (points) {
 			points = points.map(function(each, index, array) {
@@ -121,6 +122,32 @@ buildTrackablesVisualization = (function($){
 		}
 	}
 
+	/* Get Point At Position */
+
+	function getYAtX(xPos, pathEl) {
+
+		var target,
+			pos,
+			beginning = xPos,
+			end = pathEl.getTotalLength();
+
+		while (true) {
+			target = Math.floor((beginning + end) / 2);
+			pos = pathEl.getPointAtLength(target);
+			if ((target === end || target === beginning) && pos.x !== xPos) {
+				break;
+			}
+			if (pos.x > xPos) end = target;
+			else if (pos.x < xPos) beginning = target;
+			else break;
+		}
+
+		return pos;
+
+	}
+
+	/* Update Chart with new Data */
+
 	function updateChart() {
 
 		var tag = $("select.tag-list").val(),
@@ -136,6 +163,8 @@ buildTrackablesVisualization = (function($){
 		window.location.href = url;
 
 	}
+
+	/* Process Data and Visualize */
 
 	function buildChart(data) {
 
@@ -427,7 +456,7 @@ buildTrackablesVisualization = (function($){
 		}
 
 		// Track Line
-		var circle = focus.append("circle")
+		var trackLine = focus.append("circle")
           .attr("cx", 100)
           .attr("cy", 350)
           .attr("r", 3)
@@ -438,27 +467,11 @@ buildTrackablesVisualization = (function($){
 
 		// Interactive Face
 		focus.on("mousemove", function() {
+			
 			var mouse = d3.mouse(this),
-				xPos = mouse[0],
-				beginning = mouse[0], 
-				end = pathLength;
-				
-			var target;
-			var pos;
+				pos = getYAtX(mouse[0], pathEl);
 
-			while (true) {
-				target = Math.floor((beginning + end) / 2);
-				pos = pathEl.getPointAtLength(target);
-				if ((target === end || target === beginning) && pos.x !== xPos) {
-					break;
-				}
-				if (pos.x > xPos) end = target;
-				else if (pos.x < xPos) beginning = target;
-				else				break; //position found
-			}
-
-			circle
-				.attr("opacity", 1)
+			trackLine.attr("opacity", 1)
 				.attr("cx", pos.x)
 				.attr("cy", pos.y);
 
