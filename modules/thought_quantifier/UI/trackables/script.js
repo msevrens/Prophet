@@ -325,8 +325,8 @@ buildTrackablesVisualization = (function($){
 		// Colors
 		var moodColors = ['#694a69', 'steelblue', 'yellow'],
 			tfColors = ["#8E2B2B", "#3276B1", "#50457B"],
-			colorGradient = tag == "#temporalFocus" ? tfColors : moodColors,
-			colorGradient = minMaxDefault ? colorGradient : colorGradient.slice().reverse();
+			colorGradient = minMaxDefault ? moodColors : moodColors.slice().reverse(),
+			colorGradient = tag == "#temporalFocus" ? tfColors : colorGradient;
 
 		var colorScale = d3.scale.linear().domain([-1, 0, 1]).range(colorGradient);
 
