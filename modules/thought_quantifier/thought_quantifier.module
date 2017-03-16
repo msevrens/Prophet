@@ -331,6 +331,14 @@ function process_privacy($user) {
 }
 
 /**
+* Load Vocabulary Size Over Time
+*/
+
+function calculate_vocab_size() {
+
+}
+
+/**
 * Load Trackables Data and Produce Markup
 */
 

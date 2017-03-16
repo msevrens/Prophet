@@ -10,7 +10,8 @@ buildTrackablesVisualization = (function($){
 		sad = "M17, 35 C29,18 51,30 51,35",
 		depressed = "M17, 35 C23,12 51,22 51,35";
 	
-	var states = [depressed, sad, unpleasant, neutral, pleasant, happy, beaming];
+	var states = [depressed, sad, unpleasant, neutral, pleasant, happy, beaming],
+		reverseStates = states.slice().reverse();
 
 	/* Get URL Parameter */
 
@@ -153,12 +154,15 @@ buildTrackablesVisualization = (function($){
 		var tag = $("select.tag-list").val(),
 			method = d3.select("input.method-toggle").property("checked"),
 			groupby = d3.select("input.groupby-toggle").property("checked"),
+			minMax = d3.select("input.min-max-toggle").property("checked"),
 			url = updateURL(window.location.href, "tag", tag.substring(1));
 
 		method = method == true ? "sum" : "average"
 		groupby = groupby == true ? "week" : "day"
+		minMax = minMax == true ? "max" : "min"
 		url = updateURL(url, "method", method);
 		url = updateURL(url, "groupby", groupby);
+		url = updateURL(url, "minmax", minMax);
 
 		window.location.href = url;
 
@@ -214,7 +218,9 @@ buildTrackablesVisualization = (function($){
 			groupbyDefaultStr = getURLParameter("groupby") ? getURLParameter("groupby") : "week",
 			groupbyDefault = groupbyDefaultStr == "week" ? true : false,
 			methodDefaultStr = getURLParameter("method") ? getURLParameter("method") : "average",
-			methodDefault = methodDefaultStr == "sum" ? true : false;
+			methodDefault = methodDefaultStr == "sum" ? true : false,
+			minMaxDefaultStr = getURLParameter("minmax") ? getURLParameter("minmax") : "max",
+			minMaxDefault = minMaxDefaultStr == "max" ? true : false;
 
 		var tagList = d3.select(".trackables-chart").append("select")
 			.attr("class", "form-control form-control-sm tag-list")
@@ -250,18 +256,19 @@ buildTrackablesVisualization = (function($){
 			.attr("data-on", "Weekly")
 			.attr("data-off", "Daily")
 
-		/*
 		var maxMinToggle = d3.select(".trackables-chart").append("input")
-			.attr("class", "max-min-toggle")
+			.attr("class", "min-max-toggle")
 			.style("margin", "15px")
 			.attr("type", "checkbox")
+			.property("checked", minMaxDefault)
 			.attr("data-toggle", "toggle")
 			.attr("data-on", ":)")
-			.attr("data-off", ":(") */
+			.attr("data-off", ":(")
 
 		// Set Listeners
 		$('.groupby-toggle').change(updateChart)
 		$('.method-toggle').change(updateChart)
+		$('.min-max-toggle').change(updateChart)
 
 		// Visual Y-Axis
 		var faceContainer = legend.append("g")
@@ -302,7 +309,7 @@ buildTrackablesVisualization = (function($){
 			.attr("d", neutral)
 
 		// Get Facial State Map
-		var stateMap = stateLookup(states);
+		var stateMap = minMaxDefault ? stateLookup(states) : stateLookup(reverseStates);
 
 		// Data
 		var trackable = formatData(data);
@@ -318,7 +325,8 @@ buildTrackablesVisualization = (function($){
 		// Colors
 		var moodColors = ['#694a69', 'steelblue', 'yellow'],
 			tfColors = ["#8E2B2B", "#3276B1", "#50457B"],
-			colorGradient = tag == "#temporalFocus" ? tfColors : moodColors;
+			colorGradient = tag == "#temporalFocus" ? tfColors : moodColors,
+			colorGradient = minMaxDefault ? colorGradient : colorGradient.slice().reverse();
 
 		var colorScale = d3.scale.linear().domain([-1, 0, 1]).range(colorGradient);
 
