@@ -74,7 +74,7 @@
 	padding-top: 2px;
 }
 
-.front #block-predict-prediction-block {
+.front #block-thought-thought-block {
 	margin: 60px auto;
 	width: 450px;
 	margin-bottom: 35px;
@@ -510,7 +510,7 @@ header#navbar {
 		margin-left: 0px;
 	}
 
-	.front #block-predict-prediction-block {
+	.front #block-thought-thought-block {
 		margin: auto;
 		margin-bottom: 5px;
 	}
@@ -528,7 +528,7 @@ header#navbar {
 		min-width: 0px;
 	}
 
-	.front #block-predict-prediction-block {
+	.front #block-thought-thought-block {
 		width: auto;
 	}
 

@@ -8,7 +8,7 @@ function thought_block_info() {
 
   $blocks = array();
 
-  $blocks['Thought_block'] = array(
+  $blocks['thought_block'] = array(
     'info' => t('Log a Thought'),
     'cache' => DRUPAL_CACHE_GLOBAL,
   );

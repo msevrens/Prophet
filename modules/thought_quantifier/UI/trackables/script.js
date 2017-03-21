@@ -262,8 +262,8 @@ buildTrackablesVisualization = (function($){
 			.attr("type", "checkbox")
 			.property("checked", minMaxDefault)
 			.attr("data-toggle", "toggle")
-			.attr("data-on", ":)")
-			.attr("data-off", ":(")
+			.attr("data-on", ": )")
+			.attr("data-off", ": (")
 
 		// Set Listeners
 		$('.groupby-toggle').change(updateChart)
