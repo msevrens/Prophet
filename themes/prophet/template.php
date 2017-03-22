@@ -23,6 +23,7 @@ function prophet_theme() {
   */
 
 function prophet_preprocess_page(&$vars, $hook = null){
+
     if (isset($vars['node'])) {
         switch ($vars['node']->type) {
             case 'thought':
@@ -30,6 +31,12 @@ function prophet_preprocess_page(&$vars, $hook = null){
                 break;
         }
     }
+
+    if (isset($vars['node']->type)) {
+        $nodetype = $vars['node']->type;
+        $vars['theme_hook_suggestions'][] = 'page__' . $nodetype;
+    }
+    
 }
 
 /**
@@ -50,13 +57,6 @@ function prophet_form_views_exposed_form_alter(&$form, &$form_state) {
   if (!isset($form_state['view']->exposed_input['thought_type'])) {
     $form_state['input']['thought_type'] = 'All';
   }
-}
-
-function prophet_preprocess_page(&$variables) {
-    if (isset($variables['node']->type)) {
-        $nodetype = $variables['node']->type;
-        $variables['theme_hook_suggestions'][] = 'page__' . $nodetype;
-    }
 }
 
 drupal_add_js(drupal_get_path('theme', 'prophet') . '/js/script.js', array(
