@@ -482,6 +482,10 @@ header#navbar {
 /* Mobile */
 
 @media only screen and (min-width: 240px) and (max-width: 650px) and (-webkit-min-device-pixel-ratio: 2) {
+
+	.pagination > li > a, .pagination > li > span {
+    	padding: 6px 9px;
+	}
 	
 	.view-front-page-redesign .view-filters {
 		display: none;
