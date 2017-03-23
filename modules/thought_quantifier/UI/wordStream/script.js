@@ -400,16 +400,12 @@ buildWordStream = (function($){
 			    success: function(data) {
 					var viewHtml = $(data[1].data)
 					viewHtml.find(".view-filters").remove()
-					viewHtml.find('.rate-button').each(function (index, value) {
-						var href = $(value).attr('href').replace("views/ajax", "");
-						$(value).attr('href', href)
-					})
 					viewHtml.find('.pagination a').each(function (index, value) {
 						var href = $(value).attr('href').replace("views/ajax", "");
 						$(value).attr('href', href)
 					})
 					$(".bubble-stream").html(viewHtml)
-					Drupal.behaviors.rate_fivestar.attach()
+					Drupal.behaviors.RateGradient.attach()
 			    },
 			    error: function(data) {
 			    	console.log('An error occured!');

@@ -18,7 +18,7 @@
             rightLabel = rateContainer.select(".right-label"),
             opacity = fillBar.attr("data-average") / 100,
             inverseOpacity = 1 - opacity,
-            rangeScale = d3.scaleLinear().domain([10, 100]).range([0, 100]);
+            rangeScale = d3.scale.linear().domain([10, 100]).range([0, 100]);
 
         // Set Default State
         fillBar.style("width", fillBar.attr("data-average") + "%")

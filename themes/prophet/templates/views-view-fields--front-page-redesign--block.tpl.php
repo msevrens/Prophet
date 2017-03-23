@@ -58,7 +58,6 @@ if ($row->field_field_private) {
         }
       } elseif ($field->label == 'Truth') {
         if ($color_class != 'ask') {
-          print "<div class='views-label views-label-value'><span>False</span><span class='true-label'>True</span></div>";
           print $field->content;  
         }
       } else {
