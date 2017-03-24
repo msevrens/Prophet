@@ -27,7 +27,7 @@ function prophet_preprocess_page(&$vars, $hook = null){
     if (isset($vars['node'])) {
         switch ($vars['node']->type) {
             case 'thought':
-                drupal_add_js('http://d3js.org/d3.v2.js', 'external');
+                drupal_add_js('https://d3js.org/d3.v4.min.js', 'external');
                 drupal_add_js(drupal_get_path('module', 'thought_quantifier') . '/UI/gradient/gradient.js');
                 drupal_add_css(drupal_get_path('module', 'thought_quantifier') . '/UI/gradient/gradient.css');
                 break;
@@ -50,7 +50,7 @@ function prophet_preprocess_views_view(&$vars) {
   $view = &$vars['view'];
 
   if ($view->name == 'front_page_redesign') {
-    drupal_add_js('http://d3js.org/d3.v2.js', 'external');
+    drupal_add_js('https://d3js.org/d3.v4.min.js', 'external');
     drupal_add_js(drupal_get_path('module', 'thought_quantifier') . '/UI/gradient/gradient.js');
     drupal_add_css(drupal_get_path('module', 'thought_quantifier') . '/UI/gradient/gradient.css');
   }
