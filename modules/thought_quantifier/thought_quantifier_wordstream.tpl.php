@@ -72,6 +72,16 @@
  *
  * @ingroup themeable
  */
+
+$dest = drupal_get_destination();
+
+drupal_add_js(array(
+    'rate' => array(
+      'basePath' => url('rate/vote/js'),
+      'destination' => $dest['destination'],
+)
+), array('type' => 'setting'));
+
 ?>
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
