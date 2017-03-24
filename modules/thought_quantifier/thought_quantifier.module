@@ -195,9 +195,9 @@ function thought_quantifier_block_view($delta = '') {
           'js' => [
             'http://d3js.org/d3.v2.js',
             $m_path . '/UI/wordStream/bootstrap-multiselect.js',
+            $r_path . '/rate.js',
             $m_path . '/UI/wordStream/script.js',
-            $m_path . '/UI/gradient/gradient.js',
-            $r_path . '/rate.js'
+            $m_path . '/UI/gradient/gradient.js'
           ],
           'css' => [
             $m_path . '/UI/wordStream/styled.css',
