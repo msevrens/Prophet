@@ -43,8 +43,9 @@ p {
 }
 
 .bubble-stream {
-  width: 655px;
+  width: 665px;
   margin: 0 auto;
+  padding: 0px 5px;
 }
 
 .bubble-stream .rate-widget-fivestar ul {
