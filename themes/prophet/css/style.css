@@ -571,6 +571,10 @@ header#navbar {
 		max-width: 420px;
 	}
 
+	.bubble-stream {
+		max-width: 420px;
+	}
+
 	.thought-bubble .private {
 		background-image: url('private_mobile.png');
 		background-position: center;
