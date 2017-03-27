@@ -193,7 +193,7 @@ function thought_quantifier_block_view($delta = '') {
         '#markup' => load_wordstream_markup(),
         '#attached' => [
           'js' => [
-            'http://d3js.org/d3.v2.js',
+            'https://d3js.org/d3.v2.js',
             $m_path . '/UI/wordStream/bootstrap-multiselect.js',
             $r_path . '/rate.js',
             $m_path . '/UI/wordStream/script.js',
@@ -214,7 +214,7 @@ function thought_quantifier_block_view($delta = '') {
         '#markup' => load_trackables_markup(),
         '#attached' => [
           'js' => [
-            'http://d3js.org/d3.v2.js',
+            'https://d3js.org/d3.v2.js',
             $m_path . '/UI/wordStream/bootstrap-multiselect.js',
             $m_path . '/UI/trackables/script.js'
           ],
